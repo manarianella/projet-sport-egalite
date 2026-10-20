@@ -1,0 +1,21 @@
+# Environnement virtuel Python
+.venv/
+
+# Fichiers temporaires Python
+__pycache__/
+*.pyc
+
+# Outils de tests et de qualité
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.pylint.d/
+.coverage
+
+# Configuration personnelle
+.env
+.vscode/
+
+# Données brutes volumineuses
+data/raw/*
+!data/raw/.gitkeep

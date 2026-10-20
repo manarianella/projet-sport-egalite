@@ -1,0 +1,19 @@
+[project]
+name = "projet-sport-egalite"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = [
+    "dash>=4.4.1",
+    "pandas>=3.0.6",
+    "plotly>=7.1.0",
+    "requests>=2.34.2",
+]
+
+[dependency-groups]
+dev = [
+    "mypy>=2.4.0",
+    "pylint>=4.1.3",
+    "pytest>=9.1.1",
+    "radon>=6.0.1",
+    "ruff>=0.17.1",
+]
