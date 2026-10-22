@@ -1,22 +1,7 @@
 """Téléchargement des installations sportives."""
 
-from pathlib import Path
-
 import requests
-
-BASE_DIR = Path(__file__).resolve().parents[2]
-
-INSTALLATIONS_CSV = (
-    BASE_DIR / "data" / "raw" / "installations_sportives.csv"
-)
-
-# le lien CSV officiel copié depuis Data ES.
-INSTALLATIONS_URL = (
-    "https://equipements.sports.gouv.fr/api/explore/v2.1/catalog/datasets/"
-    "data-es-installation/exports/csv"
-    "?delimiter=%3B"
-    "&select=numero,nom,insee,com_name,dep_code,dep_nom,reg_nom,dens_lib"
-)
+from config import INSTALLATIONS_CSV, INSTALLATIONS_URL
 
 
 def telecharger_installations() -> None:

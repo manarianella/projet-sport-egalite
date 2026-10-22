@@ -22,3 +22,14 @@ EQUIPEMENTS_URL = (
 
 # Fichier dans lequel les données seront téléchargées
 EQUIPEMENTS_CSV = RAW_DIR / "equipements_sportifs.csv"
+
+   # Adresse officielle des installations sportives
+INSTALLATIONS_URL = (
+       "https://equipements.sports.gouv.fr/api/explore/v2.1/catalog/datasets/"
+       "data-es-installation/exports/csv"
+       "?delimiter=%3B"
+       "&select=numero,nom,insee,com_name,dep_code,dep_nom,reg_nom,dens_lib"
+   )
+
+   # Fichier dans lequel les installations seront téléchargées
+INSTALLATIONS_CSV = RAW_DIR / "installations_sportives.csv"
