@@ -29,6 +29,12 @@ def creer_histogramme(
     if nature != "Tous":
         donnees = donnees[donnees["nature_equipement"] == nature]
 
+    # Nombre total d'équipements avec une surface valide
+    nombre_total = len(donnees)
+
+    # Nombre d'équipements au-delà de la plage affichée
+    nombre_hors_plage = (donnees["surface_m2"] > surface_max).sum()
+
     # Limiter uniquement l'affichage, pas les données stockées.
     donnees = donnees[donnees["surface_m2"] <= surface_max]
 
@@ -56,6 +62,21 @@ def creer_histogramme(
         yaxis_title="Nombre d'équipements",
         bargap=0.05,
         template="plotly_white",
+        annotations=[
+            {
+                "text": (
+                    f"{nombre_total:,} surfaces valides | "
+                    f"{nombre_hors_plage:,} hors de la plage affichée"
+                ).replace(",", " "),
+                "xref": "paper",
+                "yref": "paper",
+                "x": 0,
+                "y": -0.25,
+                "showarrow": False,
+                "font": {"size": 12},
+            }
+        ],
+        margin={"b": 110},
     )
 
     return figure
