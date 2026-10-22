@@ -40,6 +40,18 @@ def creer_histogramme(
         labels={"surface_m2": "Surface de l'aire de pratique (m²)"},
     )
 
+    # Conserver les mêmes intervalles pour toutes les catégories
+    figure.update_traces(
+        xbins={
+            "start": 0,
+            "end": surface_max,
+            "size": surface_max / 50,
+        }
+    )
+
+    # Conserver la même plage sur l'axe horizontal
+    figure.update_xaxes(range=[0, surface_max])
+
     figure.update_layout(
         yaxis_title="Nombre d'équipements",
         bargap=0.05,
