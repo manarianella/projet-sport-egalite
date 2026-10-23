@@ -22,3 +22,8 @@ data/raw/*
 
 # Base SQLite locale en cours de développement
 data/db.sqlite
+
+# Fichier de test de la carte
+carte_test.html
+
+
