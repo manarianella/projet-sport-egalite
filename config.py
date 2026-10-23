@@ -28,7 +28,7 @@ INSTALLATIONS_URL = (
        "https://equipements.sports.gouv.fr/api/explore/v2.1/catalog/datasets/"
        "data-es-installation/exports/csv"
        "?delimiter=%3B"
-       "&select=numero,nom,insee,com_name,dep_code,dep_nom,reg_nom,dens_lib"
+    
    )
 
    # Fichier dans lequel les installations seront téléchargées
