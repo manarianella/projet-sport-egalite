@@ -33,3 +33,6 @@ INSTALLATIONS_URL = (
 
    # Fichier dans lequel les installations seront téléchargées
 INSTALLATIONS_CSV = RAW_DIR / "installations_sportives.csv"
+
+# Valeur du menu Région qui affiche toute la France (carte + histogramme)
+TOUTE_LA_FRANCE = "Toute la France"

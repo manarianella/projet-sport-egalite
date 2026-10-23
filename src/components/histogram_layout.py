@@ -7,6 +7,8 @@ from src.components.histogram import creer_histogramme
 from dash import Input, Output, callback, dcc, html
 from plotly.graph_objects import Figure
 
+from config import TOUTE_LA_FRANCE
+
 STYLE_FILTRES = {
     "backgroundColor": "#F4F8FC",
     "border": "1px solid #DCE6EF",
@@ -131,6 +133,6 @@ def actualiser_histogramme(nature: str, surface_max: int, region: str) -> Figure
     """Actualise l'histogramme selon les filtres sélectionnés."""
     return creer_histogramme(
         nature=nature,
-        region=region,
+        region=None if region == TOUTE_LA_FRANCE else region,
         surface_max=surface_max,
     )
