@@ -6,6 +6,13 @@ import pandas as pd
 import plotly.express as px
 from plotly.graph_objects import Figure
 
+COULEURS_NATURE = {
+    "Tous": "#4387D2",
+    "Intérieur": "#16A6A1",
+    "Découvert": "#4387D2",
+    "Extérieur couvert": "#F0A35B",
+}
+
 from config import DATABASE_PATH
 
 
@@ -55,10 +62,25 @@ def creer_histogramme(
         }
     )
 
+    figure.update_traces(
+        marker_color=COULEURS_NATURE.get(nature, "#4387D2"),
+        marker_line_color="#FFFFFF",
+        marker_line_width=0.5,
+        opacity=0.9,
+    )
+
     # Conserver la même plage sur l'axe horizontal
     figure.update_xaxes(range=[0, surface_max])
 
     figure.update_layout(
+        paper_bgcolor="#FFFFFF",
+        plot_bgcolor="#FFFFFF",
+        font={"family": "Arial", "color": "#142D4E", "size": 13},
+        title_font={"size": 20, "color": "#142D4E"},
+        hoverlabel={
+            "bgcolor": "#142D4E",
+            "font_color": "#FFFFFF",
+        },
         yaxis_title="Nombre d'équipements",
         bargap=0.05,
         template="plotly_white",
