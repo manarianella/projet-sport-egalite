@@ -21,4 +21,4 @@ data/raw/*
 !data/raw/.gitkeep
 
 # Base SQLite locale en cours de développement
-data/db.sqlite
+data/db.sqlitecarte_test.html
