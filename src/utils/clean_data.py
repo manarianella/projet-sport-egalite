@@ -95,7 +95,42 @@ def nettoyer_installations() -> None:
     )
 
 
+# Colonne de la table cleaned (équipements) qui contient le numéro d'installation
+COLONNE_NUMERO_INSTALLATION = "Numéro de l'installation sportive"
+
+# Informations territoriales ajoutées à chaque équipement
+COLONNES_TERRITOIRE = ["region", "departement", "code_departement", "type_territoire"]
+
+def joindre_territoires() -> None:
+    """Ajoute à chaque équipement la région et le territoire de son installation."""
+    with closing(sqlite3.connect(DATABASE_PATH)) as connexion:
+        equipements = pd.read_sql_query('SELECT * FROM "cleaned"', connexion)
+        installations = pd.read_sql_query(
+            'SELECT * FROM "cleaned_installations"', connexion
+        )
+
+        # Si la jointure a déjà été faite, on retire les anciennes colonnes
+        equipements = equipements.drop(columns=COLONNES_TERRITOIRE, errors="ignore")
+
+        territoires = installations[["numero_installation", *COLONNES_TERRITOIRE]]
+        resultat = equipements.merge(
+            territoires,
+            how="left",
+            left_on=COLONNE_NUMERO_INSTALLATION,
+            right_on="numero_installation",
+            validate="many_to_one",
+        ).drop(columns="numero_installation")
+
+        resultat.to_sql("cleaned", connexion, if_exists="replace", index=False)
+
+    rattaches = resultat["region"].notna().sum()
+    print(
+        f"Jointure : {len(resultat)} équipements, {rattaches} rattachés à une région "
+        f"({rattaches / len(resultat):.1%})."
+    )
+
+
 if __name__ == "__main__":
     nettoyer_equipements()
     nettoyer_installations()
-    
+    joindre_territoires()
