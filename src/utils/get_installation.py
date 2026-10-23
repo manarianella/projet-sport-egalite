@@ -7,7 +7,6 @@ import pandas as pd
 
 
 
-
 def telecharger_installations() -> None:
     """Télécharge les installations sportives au format CSV."""
     INSTALLATIONS_CSV.parent.mkdir(parents=True, exist_ok=True)
@@ -34,7 +33,7 @@ def telecharger_installations() -> None:
 def importer_installation_sqlite()-> None : 
     """ Enregistre les données brutes utiles dans SQLite """
     colonnes= ["numero", "nom", "insee", "com_name", "dep_code",
-        "dep_nom", "reg_nom", "dens_lib",]
+        "dep_nom", "reg_nom", "dens_lib", "coordonnees"]
 
     DATABASE_PATH.parent.mkdir(parents=True, exist_ok=True)
 
