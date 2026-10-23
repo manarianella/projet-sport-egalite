@@ -61,7 +61,7 @@ def separer_coordonnees(donnees: pd.DataFrame) -> pd.DataFrame:
 
 
 def filtrer_coordonnees_valides(donnees: pd.DataFrame) -> pd.DataFrame:
-    
+
     """Retire les installations sans position ou avec une position impossible."""
     latitude_ok = donnees["latitude"].between(-90, 90)
     longitude_ok = donnees["longitude"].between(-180, 180)
@@ -97,3 +97,5 @@ def nettoyer_installations() -> None:
 
 if __name__ == "__main__":
     nettoyer_equipements()
+    nettoyer_installations()
+    
