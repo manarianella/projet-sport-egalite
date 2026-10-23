@@ -26,6 +26,16 @@ def creer_layout_histogramme() -> html.Div:
                 value="Tous",
                 clearable=False,
             ),
+            html.Label("Surface maximale affichée :"),
+            dcc.Dropdown(
+                id="filtre-surface",
+                options=[
+                    {"label": "Jusqu'à 10 800 m² (95 %)", "value": 10800},
+                    {"label": "Jusqu'à 72 000 m² (99 %)", "value": 72000},
+                ],
+                value=10800,
+                clearable=False,
+            ),
             dcc.Graph(
                 id="histogramme-surfaces",
                 figure=creer_histogramme(),
@@ -37,7 +47,11 @@ def creer_layout_histogramme() -> html.Div:
 @callback(
     Output("histogramme-surfaces", "figure"),
     Input("filtre-nature", "value"),
+    Input("filtre-surface", "value"),
 )
-def actualiser_histogramme(nature: str):
-    """Actualise le graphique selon la catégorie sélectionnée."""
-    return creer_histogramme(nature=nature)
+def actualiser_histogramme(nature: str, surface_max: int):
+    """Actualise le graphique selon les deux filtres."""
+    return creer_histogramme(
+        nature=nature,
+        surface_max=surface_max,
+    )
