@@ -4,6 +4,9 @@ from dash import Input, Output, callback, dcc, html
 
 from src.components.histogram import creer_histogramme
 
+from dash import Input, Output, callback, dcc, html
+from plotly.graph_objects import Figure
+
 STYLE_FILTRES = {
     "backgroundColor": "#F4F8FC",
     "border": "1px solid #DCE6EF",
@@ -122,10 +125,12 @@ def creer_layout_histogramme() -> html.Div:
     Output("histogramme-surfaces", "figure"),
     Input("filtre-nature", "value"),
     Input("filtre-surface", "value"),
+    Input("filtre-region", "value"),
 )
-def actualiser_histogramme(nature: str, surface_max: int):
+def actualiser_histogramme(nature: str, surface_max: int, region: str) -> Figure:
     """Actualise l'histogramme selon les filtres sélectionnés."""
     return creer_histogramme(
         nature=nature,
+        region=region,
         surface_max=surface_max,
     )

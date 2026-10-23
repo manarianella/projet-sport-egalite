@@ -1,12 +1,14 @@
 """Histogramme des surfaces des équipements sportifs."""
 
 import sqlite3
+from contextlib import closing
 
 import pandas as pd
 import plotly.express as px
 from plotly.graph_objects import Figure
 
 from config import DATABASE_PATH
+
 
 COULEURS_NATURE = {
     "Tous": "#4387D2",
@@ -16,21 +18,34 @@ COULEURS_NATURE = {
 }
 
 
+def construire_filtres(nature: str, region: str | None) -> tuple[str, list[str]]:
+    """Construit la fin de la clause WHERE et ses paramètres selon les filtres."""
+    filtres = ""
+    parametres: list[str] = []
+
+    # Sélectionner la catégorie directement dans SQLite.
+    if nature != "Tous":
+        filtres += " AND nature_equipement = ?"
+        parametres.append(nature)
+
+    # Garder seulement la région choisie sur la carte.
+    if region is not None:
+        filtres += " AND region = ?"
+        parametres.append(region)
+
+    return filtres, parametres
+
+
 def creer_histogramme(
     nature: str = "Tous",
+    region: str | None = None,
     surface_max: float = 10800,
 ) -> Figure:
     """Crée un histogramme des surfaces selon les filtres choisis."""
 
-    # Sélectionner la catégorie directement dans SQLite.
-    filtre_nature = ""
-    parametres = []
+    filtres, parametres = construire_filtres(nature, region)
 
-    if nature != "Tous":
-        filtre_nature = " AND nature_equipement = ?"
-        parametres.append(nature)
-
-    with sqlite3.connect(DATABASE_PATH) as connexion:
+    with closing(sqlite3.connect(DATABASE_PATH)) as connexion:
         # Calculer les effectifs sans charger toutes les surfaces.
         requete_effectifs = f"""
             SELECT
@@ -39,7 +54,7 @@ def creer_histogramme(
                     CASE WHEN surface_m2 > ? THEN 1 ELSE 0 END
                 ) AS nombre_hors_plage
             FROM cleaned
-            WHERE surface_m2 > 0 {filtre_nature}
+            WHERE surface_m2 > 0 {filtres}
         """
 
         effectifs = pd.read_sql_query(
@@ -56,7 +71,7 @@ def creer_histogramme(
             SELECT surface_m2
             FROM cleaned
             WHERE surface_m2 > 0
-              AND surface_m2 <= ? {filtre_nature}
+              AND surface_m2 <= ? {filtres}
         """
 
         donnees = pd.read_sql_query(
@@ -65,11 +80,15 @@ def creer_histogramme(
             params=[surface_max, *parametres],
         )
 
+    titre = f"Distribution des surfaces — {nature}"
+    if region is not None:
+        titre += f" — {region}"
+
     figure = px.histogram(
         donnees,
         x="surface_m2",
         nbins=50,
-        title=f"Distribution des surfaces — {nature}",
+        title=titre,
         labels={"surface_m2": "Surface de l'aire de pratique (m²)"},
     )
 
