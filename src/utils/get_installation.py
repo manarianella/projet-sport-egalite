@@ -1,7 +1,11 @@
 """Téléchargement des installations sportives."""
 
 import requests
-from config import INSTALLATIONS_CSV, INSTALLATIONS_URL
+from config import INSTALLATIONS_CSV, INSTALLATIONS_URL, DATABASE_PATH
+import sqlite3
+import pandas as pd
+
+
 
 
 def telecharger_installations() -> None:
@@ -27,5 +31,21 @@ def telecharger_installations() -> None:
     print("Téléchargement terminé !")
 
 
+def importer_installation_sqlite()-> None : 
+    """ Enregistre les données brutes utiles dans SQLite """
+    colonnes= ["numero", "nom", "insee", "com_name", "dep_code",
+        "dep_nom", "reg_nom", "dens_lib",]
+
+    DATABASE_PATH.parent.mkdir(parents=True, exist_ok=True)
+
+    with sqlite3.connect(DATABASE_PATH) as connexion :
+        # dtype=str : on garde les valeurs brutes, sans conversion
+        donnees= pd.read_csv(INSTALLATIONS_CSV,sep=";", usecols=colonnes , dtype="str")
+        donnees.to_sql("raw_installations", connexion, if_exists="replace", index=False)
+
+    print("Importation SQLite des installations terminée.") 
+
+
 if __name__ == "__main__":
     telecharger_installations()
+    importer_installation_sqlite()
