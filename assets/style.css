@@ -1,0 +1,161 @@
+
+/* SportÉgalité — Identité visuelle */
+
+:root {
+    --bleu-nuit: #102747;
+    --bleu: #4387D2;
+    --fond: #F4F7FC;
+    --blanc: #FFFFFF;
+    --texte: #142D4E;
+    --bordure: #E2EAF5;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: var(--fond);
+    color: var(--texte);
+    font-family: Arial, sans-serif;
+}
+
+/* Structure principale */
+
+.dashboard {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* Menu de gauche */
+
+.sidebar {
+    width: 280px;
+    min-width: 280px;
+    min-height: 100vh;
+    padding: 32px 22px;
+    background: var(--bleu-nuit);
+    color: var(--blanc);
+}
+
+.sidebar-logo {
+    font-size: 26px;
+    font-weight: 700;
+    margin-bottom: 45px;
+}
+
+.sidebar-titre {
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 22px;
+}
+
+.sidebar label {
+    display: block;
+    margin: 20px 0 8px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+/* Zone principale */
+
+.contenu-principal {
+    flex: 1;
+    min-width: 0;
+    padding: 32px;
+}
+
+.entete-dashboard {
+    padding: 30px;
+    margin-bottom: 24px;
+    background: var(--blanc);
+    border: 1px solid var(--bordure);
+    border-radius: 18px;
+}
+
+.entete-dashboard h1 {
+    margin: 0;
+    font-size: 36px;
+    color: var(--bleu-nuit);
+}
+
+.entete-dashboard p {
+    color: #61748F;
+    font-size: 16px;
+}
+
+/* Cartes */
+
+.grille-statistiques {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+    margin-bottom: 24px;
+}
+
+.carte-statistique,
+.carte-graphique {
+    background: var(--blanc);
+    border: 1px solid var(--bordure);
+    border-radius: 18px;
+    box-shadow: 0 5px 20px rgba(20, 45, 78, 0.05);
+}
+
+.carte-statistique {
+    padding: 24px;
+}
+
+.valeur-statistique {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--bleu-nuit);
+}
+
+.nom-statistique {
+    margin-top: 6px;
+    font-size: 14px;
+    color: #61748F;
+}
+
+.carte-graphique {
+    padding: 24px;
+    margin-bottom: 24px;
+}
+
+.carte-graphique h2 {
+    color: var(--bleu-nuit);
+}
+
+/* Écrans plus petits */
+
+@media (max-width: 1000px) {
+    .sidebar {
+        width: 230px;
+        min-width: 230px;
+    }
+
+    .contenu-principal {
+        padding: 20px;
+    }
+
+    .grille-statistiques {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 700px) {
+    .dashboard {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        min-width: 0;
+        min-height: auto;
+    }
+
+    .contenu-principal {
+        padding: 14px;
+    }
+}
