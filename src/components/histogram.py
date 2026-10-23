@@ -6,6 +6,8 @@ import pandas as pd
 import plotly.express as px
 from plotly.graph_objects import Figure
 
+from config import DATABASE_PATH
+
 COULEURS_NATURE = {
     "Tous": "#4387D2",
     "Intérieur": "#16A6A1",
@@ -13,37 +15,55 @@ COULEURS_NATURE = {
     "Extérieur couvert": "#F0A35B",
 }
 
-from config import DATABASE_PATH
-
 
 def creer_histogramme(
     nature: str = "Tous",
     surface_max: float = 10800,
 ) -> Figure:
-    """Crée un histogramme des surfaces selon la nature choisie."""
+    """Crée un histogramme des surfaces selon les filtres choisis."""
+
+    # Sélectionner la catégorie directement dans SQLite.
+    filtre_nature = ""
+    parametres = []
+
+    if nature != "Tous":
+        filtre_nature = " AND nature_equipement = ?"
+        parametres.append(nature)
 
     with sqlite3.connect(DATABASE_PATH) as connexion:
-        donnees = pd.read_sql_query(
-            """
-            SELECT surface_m2, nature_equipement
+        # Calculer les effectifs sans charger toutes les surfaces.
+        requete_effectifs = f"""
+            SELECT
+                COUNT(*) AS nombre_total,
+                SUM(
+                    CASE WHEN surface_m2 > ? THEN 1 ELSE 0 END
+                ) AS nombre_hors_plage
             FROM cleaned
-            WHERE surface_m2 > 0
-            """,
+            WHERE surface_m2 > 0 {filtre_nature}
+        """
+
+        effectifs = pd.read_sql_query(
+            requete_effectifs,
             connexion,
+            params=[surface_max, *parametres],
         )
 
-    # Filtrer les équipements selon leur nature.
-    if nature != "Tous":
-        donnees = donnees[donnees["nature_equipement"] == nature]
+        nombre_total = int(effectifs.loc[0, "nombre_total"])
+        nombre_hors_plage = int(effectifs.loc[0, "nombre_hors_plage"] or 0)
 
-    # Nombre total d'équipements avec une surface valide
-    nombre_total = len(donnees)
+        # Charger uniquement les surfaces visibles.
+        requete_surfaces = f"""
+            SELECT surface_m2
+            FROM cleaned
+            WHERE surface_m2 > 0
+              AND surface_m2 <= ? {filtre_nature}
+        """
 
-    # Nombre d'équipements au-delà de la plage affichée
-    nombre_hors_plage = (donnees["surface_m2"] > surface_max).sum()
-
-    # Limiter uniquement l'affichage, pas les données stockées.
-    donnees = donnees[donnees["surface_m2"] <= surface_max]
+        donnees = pd.read_sql_query(
+            requete_surfaces,
+            connexion,
+            params=[surface_max, *parametres],
+        )
 
     figure = px.histogram(
         donnees,
@@ -53,23 +73,18 @@ def creer_histogramme(
         labels={"surface_m2": "Surface de l'aire de pratique (m²)"},
     )
 
-    # Conserver les mêmes intervalles pour toutes les catégories
     figure.update_traces(
         xbins={
             "start": 0,
             "end": surface_max,
             "size": surface_max / 50,
-        }
-    )
-
-    figure.update_traces(
+        },
         marker_color=COULEURS_NATURE.get(nature, "#4387D2"),
         marker_line_color="#FFFFFF",
         marker_line_width=0.5,
         opacity=0.9,
     )
 
-    # Conserver la même plage sur l'axe horizontal
     figure.update_xaxes(range=[0, surface_max])
 
     figure.update_layout(
