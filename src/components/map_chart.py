@@ -18,6 +18,7 @@ def charger_installations() -> pd.DataFrame:
     with closing(sqlite3.connect(DATABASE_PATH)) as connexion:
         return pd.read_sql_query(requete, connexion)
 
+
 def creer_carte(installations: pd.DataFrame) -> go.Figure:
     """Crée une carte où chaque point est une installation sportive."""
     figure = px.scatter_map(
@@ -25,17 +26,23 @@ def creer_carte(installations: pd.DataFrame) -> go.Figure:
         lat="latitude",
         lon="longitude",
         hover_name="nom_installation",
-        hover_data={"commune": True, "departement": True,
-                    "latitude": False, "longitude": False},
-        center={"lat": 46.6, "lon": 2.5},
-        zoom=4.5,
-        title="Installations sportives en France",
+        hover_data={
+            "commune": True,
+            "departement": True,
+            "latitude": False,
+            "longitude": False,
+        },
+        center={
+            "lat": installations["latitude"].mean(),
+            "lon": installations["longitude"].mean(),
+        },
+        zoom=6,
+        title="Installations sportives de la région",
         map_style="carto-positron",
     )
     figure.update_traces(marker={"size": 4, "opacity": 0.6})
     figure.update_layout(margin={"l": 0, "r": 0, "t": 40, "b": 0})
     return figure
-
 
 
 if __name__ == "__main__":
@@ -45,4 +52,3 @@ if __name__ == "__main__":
     figure = creer_carte(echantillon)
     figure.write_html("carte_test.html")
     print("Carte enregistrée dans carte_test.html")
-
