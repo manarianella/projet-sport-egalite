@@ -14,6 +14,30 @@ def lister_regions() -> list[str]:
     return sorted(charger_installations()["region"].dropna().unique())
 
 
+def creer_filtre_region() -> html.Div:
+    """Construit le filtre régional du dashboard."""
+    return html.Div(
+        [
+            html.Label("Région"),
+            dcc.Dropdown(
+                id="filtre-region",
+                options=lister_regions(),
+                value=REGION_PAR_DEFAUT,
+                clearable=False,
+            ),
+        ]
+    )
+
+
+def creer_graphique_carte() -> html.Div:
+    """Construit uniquement la carte des installations."""
+    return html.Div(
+        [
+            dcc.Graph(id="carte-installations"),
+        ]
+    )
+
+
 def creer_layout_carte() -> html.Div:
     """Construit le menu des régions et la carte des installations."""
     return html.Div(

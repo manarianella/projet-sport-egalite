@@ -1,11 +1,9 @@
 """Composant Dash interactif pour l'histogramme des surfaces."""
 
 from dash import Input, Output, callback, dcc, html
+from plotly.graph_objects import Figure
 
 from src.components.histogram import creer_histogramme
-
-from dash import Input, Output, callback, dcc, html
-from plotly.graph_objects import Figure
 
 STYLE_FILTRES = {
     "backgroundColor": "#F4F8FC",
@@ -28,6 +26,48 @@ STYLE_CONTENEUR = {
     "padding": "20px",
     "fontFamily": "Arial, sans-serif",
 }
+
+
+def creer_filtres_histogramme() -> html.Div:
+    """Construit les filtres de nature et de surface."""
+    return html.Div(
+        [
+            html.Label("Nature de l'équipement"),
+            dcc.Dropdown(
+                id="filtre-nature",
+                options=[
+                    {"label": "Tous les équipements", "value": "Tous"},
+                    {"label": "Intérieur", "value": "Intérieur"},
+                    {"label": "Découvert", "value": "Découvert"},
+                    {"label": "Extérieur couvert", "value": "Extérieur couvert"},
+                ],
+                value="Tous",
+                clearable=False,
+            ),
+            html.Label("Surface maximale"),
+            dcc.Dropdown(
+                id="filtre-surface",
+                options=[
+                    {"label": "10 800 m² — 95e percentile", "value": 10800},
+                    {"label": "72 000 m² — 99e percentile", "value": 72000},
+                ],
+                value=10800,
+                clearable=False,
+            ),
+        ]
+    )
+
+
+def creer_graphique_histogramme() -> html.Div:
+    """Construit uniquement le graphique des surfaces."""
+    return html.Div(
+        [
+            dcc.Graph(
+                id="histogramme-surfaces",
+                figure=creer_histogramme(),
+            ),
+        ]
+    )
 
 
 def creer_layout_histogramme() -> html.Div:
