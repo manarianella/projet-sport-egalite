@@ -4,6 +4,9 @@ from dash import Dash, html
 
 from src.components.histogram_layout import creer_layout_histogramme
 from src.components.map_layout import creer_layout_carte
+from src.utils.prepare_database import preparer_base
+
+preparer_base()
 
 # Création de l'application Dash
 app = Dash(__name__)
