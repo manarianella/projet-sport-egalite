@@ -1,5 +1,6 @@
 """Récupération des données publiques du projet SportÉgalité."""
 import sqlite3
+
 import pandas as pd
 import requests
 
@@ -71,3 +72,4 @@ def importer_equipements_sqlite() -> None:
 
 if __name__ == "__main__":
     telecharger_equipements()
+    importer_equipements_sqlite()
