@@ -40,29 +40,50 @@ def creer_carte(installations: pd.DataFrame) -> go.Figure:
             "lon": installations["longitude"].mean(),
         },
         zoom=6,
-        title="Installations sportives de la région",
         map_style="carto-positron",
     )
     figure.update_traces(marker={"size": 4, "opacity": 0.6})
-    figure.update_layout(margin={"l": 0, "r": 0, "t": 40, "b": 0})
+    figure.update_layout(margin={"l": 0, "r": 0, "t": 0, "b": 0})
     return figure
 
+
 def creer_carte_densite(installations: pd.DataFrame) -> go.Figure:
-    """Crée une carte de densité des installations sur toute la France."""
+    """Crée une carte de densité sobre des installations sportives."""
+
     figure = px.density_map(
         installations,
         lat="latitude",
         lon="longitude",
-        radius=4,
-        range_color=[0, 60],
+        radius=5,
         center=CENTRE_FRANCE,
-        zoom=4.5,
-        title="Concentration des installations sportives en France",
+        zoom=4.3,
         map_style="carto-positron",
+        color_continuous_scale=[
+            [0.0, "rgba(232, 243, 255, 0)"],
+            [0.25, "#B8D7F5"],
+            [0.55, "#4387D2"],
+            [0.80, "#21569A"],
+            [1.0, "#102747"],
+        ],
     )
-    ## Le survol n'apporte rien ici : la vue détaillée se fait par région
+
     figure.update_traces(hoverinfo="skip")
+
+    figure.update_layout(
+        height=590,
+        margin={"l": 0, "r": 0, "t": 0, "b": 0},
+        paper_bgcolor="#FFFFFF",
+        font={"family": "Arial", "color": "#142D4E"},
+        coloraxis_colorbar={
+            "title": "Densité",
+            "thickness": 12,
+            "len": 0.65,
+            "outlinewidth": 0,
+        },
+    )
+
     return figure
+
 
 if __name__ == "__main__":
     installations = charger_installations()
