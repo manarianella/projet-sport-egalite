@@ -7,6 +7,9 @@ import plotly.graph_objects as go
 
 from config import DATABASE_PATH
 
+# Vue d'ensemble : centre de la France métropolitaine
+CENTRE_FRANCE = {"lat": 46.6, "lon": 2.5}
+
 
 def charger_installations() -> pd.DataFrame:
     """Charge les installations nettoyées utiles à la carte."""
@@ -44,6 +47,22 @@ def creer_carte(installations: pd.DataFrame) -> go.Figure:
     figure.update_layout(margin={"l": 0, "r": 0, "t": 40, "b": 0})
     return figure
 
+def creer_carte_densite(installations: pd.DataFrame) -> go.Figure:
+    """Crée une carte de densité des installations sur toute la France."""
+    figure = px.density_map(
+        installations,
+        lat="latitude",
+        lon="longitude",
+        radius=4,
+        range_color=[0, 60],
+        center=CENTRE_FRANCE,
+        zoom=4.5,
+        title="Concentration des installations sportives en France",
+        map_style="carto-positron",
+    )
+    ## Le survol n'apporte rien ici : la vue détaillée se fait par région
+    figure.update_traces(hoverinfo="skip")
+    return figure
 
 if __name__ == "__main__":
     installations = charger_installations()
