@@ -1,10 +1,11 @@
 """Téléchargement des installations sportives."""
 
-import requests
-from config import INSTALLATIONS_CSV, INSTALLATIONS_URL, DATABASE_PATH
 import sqlite3
-import pandas as pd
 
+import pandas as pd
+import requests
+
+from config import DATABASE_PATH, INSTALLATIONS_CSV, INSTALLATIONS_URL
 
 
 def telecharger_installations() -> None:

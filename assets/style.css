@@ -30,14 +30,22 @@ body {
 
 /* Menu de gauche */
 
+
 .sidebar {
+    position: sticky;
+    top: 0;
+    align-self: flex-start;
+
     width: 280px;
     min-width: 280px;
-    min-height: 100vh;
+    height: 100vh;
+    overflow-y: auto;
+
     padding: 32px 22px;
     background: var(--bleu-nuit);
     color: var(--blanc);
 }
+
 
 .sidebar-logo {
     font-size: 26px;
@@ -142,6 +150,12 @@ body {
     .grille-statistiques {
         grid-template-columns: 1fr;
     }
+
+    .sidebar {
+    position: static;
+    height: auto;
+    overflow-y: visible;
+    }
 }
 
 @media (max-width: 700px) {
@@ -158,4 +172,296 @@ body {
     .contenu-principal {
         padding: 14px;
     }
+}
+
+
+/* Menus déroulants Dash 4 — Texte sélectionné */
+
+.sidebar .dash-dropdown-trigger,
+.sidebar .dash-dropdown-value,
+.sidebar .dash-dropdown-value-item {
+    color: #142D4E !important;
+    -webkit-text-fill-color: #142D4E !important;
+}
+
+.sidebar .dash-dropdown-value-item {
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+.sidebar .dash-dropdown-trigger {
+    background-color: #FFFFFF !important;
+    border-radius: 8px;
+}
+
+.sidebar .dash-dropdown-value {
+    background-color: transparent !important;
+}
+
+
+/* Finitions du dashboard */
+
+.contenu-principal {
+    padding: 30px;
+    max-width: 1600px;
+}
+
+.entete-dashboard {
+    padding: 26px 32px;
+    margin-bottom: 20px;
+}
+
+.entete-dashboard h1 {
+    font-size: 32px;
+    letter-spacing: -0.8px;
+}
+
+.grille-statistiques {
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.carte-statistique {
+    padding: 22px 24px;
+}
+
+.valeur-statistique {
+    font-size: 30px;
+    letter-spacing: -0.6px;
+}
+
+.carte-graphique {
+    padding: 22px 26px;
+    margin-bottom: 20px;
+}
+
+.carte-graphique h2 {
+    font-size: 21px;
+    margin: 0 0 16px;
+}
+
+.carte-graphique .dash-graph {
+    width: 100%;
+}
+
+@media (max-width: 700px) {
+    .contenu-principal {
+        padding: 14px;
+    }
+
+    .carte-graphique {
+        padding: 16px;
+    }
+}
+
+
+/* Titres et descriptions des graphiques */
+
+.carte-graphique h2 {
+    margin: 0 0 8px;
+    font-size: 21px;
+    font-weight: 700;
+    letter-spacing: -0.4px;
+    color: #102747;
+}
+
+.description-graphique {
+    margin: 0 0 18px;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #61748F;
+}
+
+/* Cartes du dashboard */
+
+.carte-statistique,
+.carte-graphique {
+    transition: box-shadow 0.2s ease;
+}
+
+.carte-statistique:hover,
+.carte-graphique:hover {
+    box-shadow: 0 8px 25px rgba(20, 45, 78, 0.09);
+}
+
+.valeur-statistique {
+    font-variant-numeric: tabular-nums;
+}
+
+/* Séparation harmonieuse des graphiques */
+
+.carte-graphique {
+    overflow: hidden;
+}
+
+
+/* Organisation de la barre latérale */
+
+.sidebar-section {
+    padding: 18px 0 24px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.sidebar-section-titre {
+    color: #80C7F5;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1.3px;
+    margin-bottom: 16px;
+}
+
+.sidebar-aide {
+    margin: 12px 0 0;
+    color: #A9BED9;
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+.sidebar-section label {
+    font-size: 13px;
+    line-height: 1.4;
+    margin-top: 12px;
+}
+
+.sidebar-titre {
+    color: #DAE9FB;
+    margin-bottom: 14px;
+}
+
+/* Petite touche de couleur pour les statistiques */
+
+.carte-statistique:nth-child(1) {
+    border-top: 4px solid #4387D2;
+}
+
+.carte-statistique:nth-child(2) {
+    border-top: 4px solid #16A6A1;
+}
+
+.carte-statistique:nth-child(3) {
+    border-top: 4px solid #F0A35B;
+}
+
+
+
+/* Tableau de comparaison des communes */
+
+.conteneur-tableau {
+    width: 100%;
+    overflow-x: auto;
+    margin-top: 18px;
+}
+
+.tableau-communes {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.tableau-communes thead {
+    background: #EDF4FC;
+}
+
+.tableau-communes th {
+    padding: 16px 20px;
+    color: #102747;
+    text-align: left;
+    font-weight: 700;
+    border-bottom: 2px solid #DCE8F5;
+}
+
+.tableau-communes td {
+    padding: 15px 20px;
+    border-bottom: 1px solid #E8EEF6;
+    color: #142D4E;
+}
+
+.tableau-communes tbody tr:nth-child(even) {
+    background: #F8FAFD;
+}
+
+.tableau-communes tbody tr:hover {
+    background: #EAF4FF;
+}
+
+.tableau-communes td:first-child {
+    color: #4387D2;
+    font-weight: 700;
+    width: 80px;
+}
+
+.tableau-communes th:last-child,
+.tableau-communes td:last-child {
+    text-align: right;
+    font-weight: 600;
+}
+
+.tableau-communes tbody tr:last-child td {
+    border-bottom: none;
+}
+
+
+/* Sélecteur des modes d'analyse */
+
+.choix-analyse {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 14px 0 20px;
+}
+
+.choix-analyse label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 11px 16px;
+    background: #EDF4FC;
+    border: 1px solid #DCE8F5;
+    border-radius: 9px;
+    color: #142D4E;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.choix-analyse label:has(input:checked) {
+    background: #D7F3F0;
+    border-color: #16A6A1;
+    color: #087D79;
+}
+
+.choix-analyse input {
+    accent-color: #16A6A1;
+}
+
+
+/* Présentation du projet SportÉgalité */
+
+.entete-categorie {
+    color: #16A6A1 !important;
+    font-size: 12px !important;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    margin: 0 0 12px;
+}
+
+.entete-dashboard h1 {
+    font-size: 32px;
+    margin: 0 0 16px;
+}
+
+.entete-problematique {
+    font-size: 19px;
+    font-weight: 700;
+    line-height: 1.5;
+    color: #102747;
+    margin: 0 0 12px;
+}
+
+.entete-introduction {
+    max-width: 900px;
+    font-size: 14px !important;
+    line-height: 1.8;
+    color: #61748F;
+    margin: 0;
 }

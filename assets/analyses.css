@@ -1,0 +1,104 @@
+
+/* Deux graphiques côte à côte */
+
+.grille-analyses {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+    align-items: start;
+}
+
+.grille-analyses .carte-graphique {
+    min-width: 0;
+    padding: 22px;
+    margin-bottom: 24px;
+    overflow: hidden;
+    border-top: 4px solid #4387D2;
+}
+
+.grille-analyses .carte-graphique:nth-child(2) {
+    border-top-color: #16A6A1;
+}
+
+.grille-analyses .carte-graphique h2 {
+    font-size: 20px;
+    line-height: 1.4;
+}
+
+.grille-analyses .description-graphique {
+    min-height: 44px;
+}
+
+.grille-analyses .dash-graph {
+    width: 100%;
+    min-width: 0;
+}
+
+/* Sélection équipements ou surfaces */
+
+.choix-analyse {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 15px 0;
+}
+
+.choix-analyse label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    border: 1px solid #DCE8F5;
+    border-radius: 9px;
+    background: #EDF4FC;
+    color: #142D4E;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.choix-analyse label:has(input:checked) {
+    background: #D7F3F0;
+    border-color: #16A6A1;
+    color: #087D79;
+}
+
+.choix-analyse input {
+    accent-color: #16A6A1;
+}
+
+/* Petits écrans : graphiques superposés */
+
+@media (max-width: 1250px) {
+    .grille-analyses {
+        grid-template-columns: 1fr;
+    }
+
+    .grille-analyses .description-graphique {
+        min-height: auto;
+    }
+}
+
+
+/* Résumé dynamique des filtres de surface */
+
+.resume-filtres-surfaces {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 10px 0 16px;
+}
+
+.filtre-indicateur {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 11px;
+    border-radius: 7px;
+    background-color: #E6F5F6;
+    color: #087D79;
+    border: 1px solid #BDE5E3;
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.4;
+}

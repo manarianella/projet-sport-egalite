@@ -1,9 +1,11 @@
 """Nettoyage des données sportives pour le dashboard SportÉgalité."""
 
 import sqlite3
-import pandas as pd
-from config import DATABASE_PATH
 from contextlib import closing
+
+import pandas as pd
+
+from config import DATABASE_PATH
 
 
 def nettoyer_equipements() -> None:

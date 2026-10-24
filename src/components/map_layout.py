@@ -21,7 +21,7 @@ def creer_filtre_region() -> html.Div:
     """Construit le filtre régional du dashboard."""
     return html.Div(
         [
-            html.Label("Région"),
+            html.Label("Région - installations et équipements"),
             dcc.Dropdown(
                 id="filtre-region",
                 options=lister_regions(),

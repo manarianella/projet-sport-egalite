@@ -26,9 +26,9 @@ def test_histogramme_intervalles():
     assert figure.data[0].xbins.size == 216
 
 
-def test_histogramme_annotation():
-    """Vérifie que les effectifs sont indiqués."""
+def test_histogramme_sans_annotation():
+    """Vérifie que le graphique ne contient pas d'annotation inutile."""
     figure = creer_histogramme()
 
-    assert len(figure.layout.annotations) > 0
-    assert "surfaces valides" in figure.layout.annotations[0].text
+    assert not figure.layout.annotations
+    assert figure.data[0].type == "histogram"
