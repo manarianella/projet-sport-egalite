@@ -7,6 +7,13 @@ import pandas as pd
 
 from config import DATABASE_PATH
 
+# Arrondissements municipaux : (premier code, dernier code) -> (code de la ville, nom)
+ARRONDISSEMENTS = {
+    (75101, 75120): ("75056", "Paris"),
+    (13201, 13216): ("13055", "Marseille"),
+    (69381, 69389): ("69123", "Lyon"),
+}
+
 
 def nettoyer_equipements() -> None:
     """Nettoie les surfaces et crée la table SQLite cleaned."""
@@ -28,9 +35,7 @@ def nettoyer_equipements() -> None:
         donnees["surface_m2"] = surfaces.where(surfaces > 0)
 
         # Ajouter la catégorie d'origine sans la modifier
-        donnees["nature_equipement"] = (
-            donnees["Nature de l'équipement sportif"]
-        )
+        donnees["nature_equipement"] = donnees["Nature de l'équipement sportif"]
 
         # Enregistrer la version nettoyée
         donnees.to_sql(
@@ -41,6 +46,7 @@ def nettoyer_equipements() -> None:
         )
 
     print("Nettoyage terminé : table cleaned créée.")
+
 
 COLONNES_INSTALLATIONS = {
     "numero": "numero_installation",
@@ -53,6 +59,7 @@ COLONNES_INSTALLATIONS = {
     "dens_lib": "type_territoire",
 }
 
+
 def separer_coordonnees(donnees: pd.DataFrame) -> pd.DataFrame:
     """Découpe la colonne texte "lat, lon" en deux colonnes numériques."""
 
@@ -63,13 +70,13 @@ def separer_coordonnees(donnees: pd.DataFrame) -> pd.DataFrame:
 
 
 def filtrer_coordonnees_valides(donnees: pd.DataFrame) -> pd.DataFrame:
-
     """Retire les installations sans position ou avec une position impossible."""
     latitude_ok = donnees["latitude"].between(-90, 90)
     longitude_ok = donnees["longitude"].between(-180, 180)
     # Le point (0, 0) est dans l'océan Atlantique : c'est une valeur par défaut
     pas_zero = ~((donnees["latitude"] == 0) & (donnees["longitude"] == 0))
     return donnees[latitude_ok & longitude_ok & pas_zero]
+
 
 def nettoyer_installations() -> None:
     """Nettoie les installations et crée la table SQLite cleaned_installations."""
@@ -87,6 +94,11 @@ def nettoyer_installations() -> None:
         donnees["dep_code"] = donnees["dep_code"].str.zfill(2)
 
         donnees = donnees.rename(columns=COLONNES_INSTALLATIONS)
+
+        # Paris, Marseille et Lyon comptent comme une seule commune
+        donnees["code_commune"], donnees["nom_commune"] = regrouper_arrondissements(
+            donnees["code_insee"], donnees["commune"]
+        )
         donnees.to_sql(
             "cleaned_installations", connexion, if_exists="replace", index=False
         )
@@ -102,6 +114,22 @@ COLONNE_NUMERO_INSTALLATION = "Numéro de l'installation sportive"
 
 # Informations territoriales ajoutées à chaque équipement
 COLONNES_TERRITOIRE = ["region", "departement", "code_departement", "type_territoire"]
+
+
+def regrouper_arrondissements(
+    codes: pd.Series, noms: pd.Series
+) -> tuple[pd.Series, pd.Series]:
+    """Remplace les arrondissements de Paris, Marseille et Lyon par leur ville."""
+    codes_ville = codes.copy()
+    noms_ville = noms.copy()
+    # Les codes corses (2A, 2B) ne sont pas numériques : ils deviennent NaN ici
+    codes_numeriques = pd.to_numeric(codes, errors="coerce")
+    for (debut, fin), (code_ville, nom_ville) in ARRONDISSEMENTS.items():
+        dans_la_ville = codes_numeriques.between(debut, fin)
+        codes_ville[dans_la_ville] = code_ville
+        noms_ville[dans_la_ville] = nom_ville
+    return codes_ville, noms_ville
+
 
 def joindre_territoires() -> None:
     """Ajoute à chaque équipement la région et le territoire de son installation."""
@@ -122,6 +150,11 @@ def joindre_territoires() -> None:
             right_on="numero_installation",
             validate="many_to_one",
         ).drop(columns="numero_installation")
+
+        # Paris, Marseille et Lyon comptent comme une seule commune
+        resultat["code_commune"], resultat["nom_commune"] = regrouper_arrondissements(
+            resultat["Commune INSEE"], resultat["Commune nom"]
+        )
 
         resultat.to_sql("cleaned", connexion, if_exists="replace", index=False)
 

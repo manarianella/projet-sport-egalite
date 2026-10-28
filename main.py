@@ -245,7 +245,7 @@ def actualiser_statistiques(
             ).fetchone()[0]
 
             nb_communes = connexion.execute(
-                'SELECT COUNT(DISTINCT "Commune INSEE") FROM "cleaned"'
+                'SELECT COUNT(DISTINCT code_commune) FROM "cleaned"'
             ).fetchone()[0]
         else:
             nb_equipements = connexion.execute(
@@ -264,7 +264,7 @@ def actualiser_statistiques(
 
             nb_communes = connexion.execute(
                 """
-                SELECT COUNT(DISTINCT "Commune INSEE")
+                SELECT COUNT(DISTINCT code_commune)
                 FROM cleaned
                 WHERE region = ?
                 """,

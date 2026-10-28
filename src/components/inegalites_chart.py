@@ -1,11 +1,12 @@
 """Comparaison des équipements et installations entre communes."""
 
 import sqlite3
+from contextlib import closing
 
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
-from plotly.graph_objects import Figure
+
 
 from config import DATABASE_PATH, TOUTE_LA_FRANCE
 
@@ -13,7 +14,7 @@ from config import DATABASE_PATH, TOUTE_LA_FRANCE
 def creer_graphique_inegalites(
     region: str | None = None,
     mode: str = "equipements",
-) -> Figure:
+) -> go.Figure:
     """Affiche les dix communes les plus équipées ou les plus dotées en installations."""
 
     parametres: list[str] = []
@@ -26,15 +27,15 @@ def creer_graphique_inegalites(
     if mode == "installations":
         requete = f"""
             SELECT
-                code_insee,
-                MAX(commune) AS commune,
+                code_commune AS code_insee,
+                MAX(nom_commune) AS commune,
                 COUNT(DISTINCT numero_installation) AS nombre
             FROM cleaned_installations
-            WHERE code_insee IS NOT NULL
-              AND TRIM(code_insee) != ''
+            WHERE code_commune IS NOT NULL
+              AND TRIM(code_commune) != ''
               AND numero_installation IS NOT NULL
               {filtre_region}
-            GROUP BY code_insee
+            GROUP BY code_commune
             ORDER BY nombre DESC, commune ASC
             LIMIT 10
         """
@@ -45,14 +46,14 @@ def creer_graphique_inegalites(
     else:
         requete = f"""
             SELECT
-                "Commune INSEE" AS code_insee,
-                MAX("Commune nom") AS commune,
+                code_commune AS code_insee,
+                MAX(nom_commune) AS commune,
                 COUNT(DISTINCT "Numéro de l'équipement sportif") AS nombre
             FROM cleaned
-            WHERE "Commune INSEE" IS NOT NULL
-              AND TRIM("Commune INSEE") != ''
+            WHERE code_commune IS NOT NULL
+              AND TRIM(code_commune) != ''
               {filtre_region}
-            GROUP BY "Commune INSEE"
+            GROUP BY code_commune
             ORDER BY nombre DESC, commune ASC
             LIMIT 10
         """
@@ -60,7 +61,7 @@ def creer_graphique_inegalites(
         libelle = "Nombre d'équipements sportifs"
         couleur = "#16A6A1"
 
-    with sqlite3.connect(DATABASE_PATH) as connexion:
+    with closing(sqlite3.connect(DATABASE_PATH)) as connexion:
         donnees = pd.read_sql_query(
             requete,
             connexion,
