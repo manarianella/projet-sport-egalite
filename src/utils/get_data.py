@@ -1,4 +1,5 @@
 """Récupération des données publiques du projet SportÉgalité."""
+
 import sqlite3
 
 import pandas as pd
@@ -30,6 +31,7 @@ def telecharger_equipements() -> None:
                     fichier.write(bloc)
 
     print(f"Téléchargement terminé : {EQUIPEMENTS_CSV}")
+
 
 def importer_equipements_sqlite() -> None:
     """Enregistre les données brutes utiles des équipements dans SQLite."""
@@ -69,6 +71,7 @@ def importer_equipements_sqlite() -> None:
             premier_bloc = False
 
     print("Importation SQLite des équipements terminée.")
+
 
 if __name__ == "__main__":
     telecharger_equipements()
