@@ -570,7 +570,7 @@ PROJET-SPORT-EGALITE/
 │       └── .gitkeep
 │
 ├── docs/
-│   ├── analyse_equipements.md
+│   ├── rapport_analyse.md
 │   └── images/
 │       ├── comparaison_equip_insta.png
 │       ├── dashboard_carte_region.png
@@ -798,7 +798,7 @@ Le rapport d'analyse détaille les observations réalisées à partir des donné
 
 Il présente les principaux résultats chiffrés, leur interprétation ainsi que les limites de notre démarche.
 
-**Consulter le rapport complet : ( rapport zelal)
+**[Consulter le rapport d'analyse complet de SportÉgalité](docs/rapport_analyse.md)**
 
 ### 4.3. Précautions d'interprétation
 
@@ -883,13 +883,9 @@ Afin de rendre notre démarche transparente, nous distinguons les ressources doc
 
 | Partie du projet | Type d'assistance à documenter | Vérification |
 |---|---|---|
-| `main.py` | Organisation de l'interface et callbacks Dash | À vérifier |
-| `src/components/histogram.py` | Construction et filtrage de l'histogramme | À vérifier |
-| `src/components/map_chart.py` | Carte géographique et infobulles | À vérifier |
-| `src/components/inegalites_chart.py` | Classement des communes et requêtes SQL | À vérifier |
-| `src/utils/clean_data.py` | Traitements Pandas et préparation SQLite | À vérifier |
-| `README.md` | Assistance à la rédaction et à la structuration | ChatGPT |
-
-**Remarque :** ce tableau est un inventaire de vérification. Il doit être complété pour identifier précisément les éventuelles portions de code empruntées ou générées, les outils utilisés et leur fonctionnement.
-
-Les sources et les prompts structurants, lorsque leur déclaration est requise, seront joints à cette section ou à un document annexe.
+| `main.py` | Organisation de l'interface et callbacks Dash | Tests et essais du dashboard |
+| `src/components/histogram.py` | Construction et filtrage de l'histogramme | Tests et filtres interactifs |
+| `src/components/map_chart.py` | Carte géographique et infobulles | Affichage et interactions de la carte |
+| `src/components/inegalites_chart.py` | Classement des communes et requêtes SQL | Contrôle des classements |
+| `src/utils/clean_data.py` | Traitements Pandas et préparation SQLite | 	Vérification des tables SQLite |
+| `README.md` | Assistance à la rédaction et à la structuration | 	Relecture par le binôme et ChatGPT |
