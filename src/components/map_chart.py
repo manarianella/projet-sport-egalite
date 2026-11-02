@@ -27,7 +27,6 @@ def agreger_par_grille(installations: pd.DataFrame) -> pd.DataFrame:
     return grille.value_counts().reset_index(name="nombre")
 
 
-
 def charger_installations() -> pd.DataFrame:
     """Charge les installations nettoyées utiles à la carte."""
     requete = """
@@ -104,10 +103,13 @@ def creer_carte_densite(installations: pd.DataFrame) -> go.Figure:
     return figure
 
 
-if __name__ == "__main__":
-    installations = charger_installations()
-    # Test sur un échantillon : 144 000 points ralentiraient le navigateur
-    echantillon = installations.sample(n=5000, random_state=0)
-    figure = creer_carte(echantillon)
-    figure.write_html("carte_test.html")
+def tester_carte() -> None:
+    """Enregistre une carte de test sur un échantillon de 5 000 installations."""
+    # 144 000 points ralentiraient le navigateur : on teste sur un échantillon
+    echantillon = charger_installations().sample(n=5000, random_state=0)
+    creer_carte(echantillon).write_html("carte_test.html")
     print("Carte enregistrée dans carte_test.html")
+
+
+if __name__ == "__main__":
+    tester_carte()
