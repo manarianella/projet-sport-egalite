@@ -27,7 +27,6 @@ def agreger_par_grille(installations: pd.DataFrame) -> pd.DataFrame:
     return grille.value_counts().reset_index(name="nombre")
 
 
-
 def charger_installations() -> pd.DataFrame:
     """Charge les installations nettoyées utiles à la carte."""
     requete = """
