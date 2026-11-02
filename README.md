@@ -830,16 +830,40 @@ L'utilisation de ressources extérieures et d'outils d'intelligence artificielle
 
 ### 5.2. Répartition du travail
 
-Le projet a été réalisé en binôme.
+Le projet a été réalisé en binôme. Chaque membre a développé ses parties sur sa propre
+branche Git, puis les a intégrées à la branche `dev` par des merge requests relues
+par l'autre membre.
 
-| Membre | Contributions principales |
-|---|---|
-| Anella Manari | Récupération et exploitation des équipements sportifs, intégration SQLite, développement et amélioration des visualisations, interface du dashboard, documentation README |
-| Zelal Sahin | Récupération et préparation des installations sportives, traitements territoriaux, amélioration du regroupement des communes et rédaction du rapport d'analyse |
+**Anella Manari**
 
-Les deux membres ont également participé aux échanges, à l'intégration des modifications et aux vérifications du projet.
+- Récupération des équipements sportifs (`get_data.py`) et import dans la table `raw`.
+- Nettoyage des surfaces des équipements (`nettoyer_equipements()`).
+- Histogramme des surfaces et ses filtres « Nature » et « Surface maximale »
+  (`histogram.py`, `histogram_layout.py`).
+- Mise en page du dashboard : menu latéral, indicateurs clés, styles CSS (`main.py`, `assets/`).
+- Graphique de comparaison entre communes (`inegalites_chart.py`).
+- Archive compressée de la base et restauration automatique (`prepare_database.py`).
+- Tests du nettoyage, de l'histogramme et de la jointure.
+- Rédaction du README.
 
-Cette répartition présente les principales responsabilités, sans exclure les contributions communes sur certaines fonctionnalités.
+**Zelal Sahin**
+
+- Récupération des installations sportives (`get_installation.py`) et import dans la table
+  `raw_installations`.
+- Nettoyage des installations : doublons, coordonnées, codes de département
+  (`nettoyer_installations()`).
+- Jointure entre équipements et installations pour ajouter la région, le département
+  et le type de territoire (`joindre_territoires()`).
+- Regroupement des arrondissements de Paris, Marseille et Lyon
+  (`regrouper_arrondissements()`), et adaptation du classement et des indicateurs.
+- Carte des installations : vue nationale de densité et vue régionale par points,
+  filtre « Région » partagé avec l'histogramme (`map_chart.py`, `map_layout.py`).
+- Rédaction du rapport d'analyse.
+- Tests du nettoyage des installations et de la carte, vérifications de qualité
+  (Ruff, Pylint, Mypy, Radon).
+
+Les deux membres ont également participé aux échanges, à la relecture des merge requests,
+à la résolution des conflits Git et aux vérifications du projet.
 
 ### 5.3. Sources et bibliothèques utilisées
 
