@@ -35,3 +35,12 @@ INSTALLATIONS_CSV = RAW_DIR / "installations_sportives.csv"
 
 # Valeur du filtre permettant d'afficher toute la France
 TOUTE_LA_FRANCE = "Toute la France"
+
+# Population des communes (API Découpage administratif, geo.api.gouv.fr)
+POPULATION_URL = (
+    "https://geo.api.gouv.fr/communes"
+    "?fields=code,nom,population,codeDepartement,codeRegion,region&format=json"
+)
+
+# Fichier de téléchargement de la population
+POPULATION_JSON = RAW_DIR / "population_communes.json"
