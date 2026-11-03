@@ -77,9 +77,9 @@ app.layout = html.Div(
                         ),
                         creer_filtres_histogramme(),
                         html.P(
-                            "La nature et la surface maximale "
-                            "modifient uniquement l'histogramme "
-                            "des surfaces, à gauche.",
+                            "La nature de l'équipement permet de filtrer "
+                            "l'histogramme des surfaces. Les échelles restent "
+                            "fixes pour faciliter les comparaisons entre régions.",
                             className="sidebar-aide",
                         ),
                     ],
@@ -182,26 +182,11 @@ app.layout = html.Div(
                             [
                                 html.H2("Comparaison entre communes"),
                                 html.P(
-                                    "Découvrez les dix communes "
-                                    "comptant le plus d'équipements "
-                                    "ou d'installations sportives.",
+                                    "Ce graphique réunit les cinq communes les mieux dotées "
+                                    "en équipements et les cinq mieux dotées en installations "
+                                    "pour 10 000 habitants. Seules les communes d'au moins "
+                                    "1 000 habitants sont prises en compte.",
                                     className="description-graphique",
-                                ),
-                                dcc.RadioItems(
-                                    id="mode-inegalites",
-                                    options=[
-                                        {
-                                            "label": "Équipements",
-                                            "value": "equipements",
-                                        },
-                                        {
-                                            "label": "Installations",
-                                            "value": "installations",
-                                        },
-                                    ],
-                                    value="equipements",
-                                    inline=True,
-                                    className="choix-analyse",
                                 ),
                                 dcc.Graph(
                                     id="graphique-inegalites",
@@ -281,31 +266,22 @@ def actualiser_statistiques(
 @callback(
     Output("graphique-inegalites", "figure"),
     Input("filtre-region", "value"),
-    Input("mode-inegalites", "value"),
 )
-def actualiser_inegalites(
-    region: str | None,
-    mode: str,
-) -> Figure:
-    """Actualise la comparaison des communes."""
-    return creer_graphique_inegalites(
-        region=region,
-        mode=mode,
-    )
+def actualiser_inegalites(region: str | None) -> Figure:
+    """Actualise la comparaison selon la région sélectionnée."""
+    return creer_graphique_inegalites(region=region)
 
 
 @callback(
     Output("resume-filtres-surfaces", "children"),
     Input("filtre-region", "value"),
     Input("filtre-nature", "value"),
-    Input("filtre-surface", "value"),
 )
 def afficher_filtres_surfaces(
     region: str | None,
     nature: str,
-    surface_max: int,
 ) -> list:
-    """Affiche les filtres actifs sous le titre de l'histogramme."""
+    """Affiche les filtres actifs de l'histogramme."""
 
     nom_region = "Toute la France" if region in (None, TOUTE_LA_FRANCE) else region
 
@@ -315,7 +291,7 @@ def afficher_filtres_surfaces(
         html.Span(nom_region, className="filtre-indicateur"),
         html.Span(nom_nature, className="filtre-indicateur"),
         html.Span(
-            f"Jusqu'à {surface_max:,.0f} m²".replace(",", " "),
+            "Surfaces : 0 à 10 800 m²",
             className="filtre-indicateur",
         ),
     ]
