@@ -6,7 +6,7 @@ dans data/raw/ et dans une table « raw » SQLite par source :
 - les équipements sportifs -> table raw ;
 - les installations sportives -> table raw_installations.
 """
-
+import json
 import sqlite3
 from contextlib import closing
 from pathlib import Path
@@ -20,6 +20,8 @@ from config import (
     EQUIPEMENTS_URL,
     INSTALLATIONS_CSV,
     INSTALLATIONS_URL,
+    POPULATION_JSON,
+    POPULATION_URL,
 )
 
 # Colonnes brutes conservées pour chaque source
@@ -129,9 +131,38 @@ def importer_installations_sqlite() -> None:
 
     print("Importation SQLite des installations terminée.")
 
+def telecharger_population() -> None:
+    """Télécharge la population des communes depuis l'API Découpage administratif."""
+    telecharger_fichier(POPULATION_URL, POPULATION_JSON)
+
+def importer_population_sqlite() -> None:
+    """Enregistre la population brute des communes dans la table raw_population."""
+
+    DATABASE_PATH.parent.mkdir(parents=True, exist_ok=True)
+
+    # parse_int=str : les nombres restent en texte, exactement comme dans le fichier
+    with POPULATION_JSON.open(encoding="utf-8") as fichier:
+        communes = json.load(fichier, parse_int=str, parse_float=str)
+
+    # json_normalize transforme la région imbriquée {"code": ..., "nom": ...}
+    # en deux colonnes : region.code et region.nom
+    donnees = pd.json_normalize(communes)
+
+    with closing(sqlite3.connect(DATABASE_PATH)) as connexion:
+        donnees.to_sql(
+            name="raw_population",
+            con=connexion,
+            if_exists="replace",
+            index=False,
+        )
+        connexion.commit()
+
+    print("Importation SQLite de la population terminée.")
 
 if __name__ == "__main__":
     telecharger_equipements()
     importer_equipements_sqlite()
     telecharger_installations()
     importer_installations_sqlite()
+    telecharger_population()
+    importer_population_sqlite()

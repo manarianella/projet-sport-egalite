@@ -14,6 +14,16 @@ ARRONDISSEMENTS = {
     (69381, 69389): ("69123", "Lyon"),
 }
 
+# Noms finaux des colonnes de population (contrat de données)
+COLONNES_POPULATION = {
+    "code": "code_commune",
+    "nom": "nom_commune",
+    "population": "population",
+    "codeDepartement": "code_departement",
+    "codeRegion": "code_region",
+    "region.nom": "nom_region",
+}
+
 
 def nettoyer_equipements() -> None:
     """Nettoie les surfaces et crée la table SQLite cleaned."""
@@ -164,8 +174,37 @@ def joindre_territoires() -> None:
         f"({rattaches / len(resultat):.1%})."
     )
 
+def nettoyer_population() -> None:
+    """Nettoie la population des communes et crée la table cleaned_population."""
+    with closing(sqlite3.connect(DATABASE_PATH)) as connexion:
+        donnees = pd.read_sql_query('SELECT * FROM "raw_population"', connexion)
+        nombre_brut = len(donnees)
+
+        donnees = donnees[list(COLONNES_POPULATION)].rename(columns=COLONNES_POPULATION)
+
+        # La population est stockée en texte dans la table brute
+        donnees["population"] = pd.to_numeric(donnees["population"], errors="coerce")
+
+        # Une commune sans population connue ne permet pas de calculer un ratio
+        donnees = donnees[donnees["population"] > 0].copy()
+        donnees["population"] = donnees["population"].astype(int)
+
+        # Une commune ne doit apparaître qu'une seule fois
+        donnees = donnees.drop_duplicates(subset="code_commune")
+
+        donnees.to_sql(
+            "cleaned_population", connexion, if_exists="replace", index=False
+        )
+        connexion.commit()
+
+    print(
+        f"Population : {nombre_brut} communes brutes, {len(donnees)} conservées, "
+        f"{nombre_brut - len(donnees)} exclues."
+    )
 
 if __name__ == "__main__":
     nettoyer_equipements()
     nettoyer_installations()
     joindre_territoires()
+    nettoyer_population()
+    
