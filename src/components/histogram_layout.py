@@ -35,22 +35,6 @@ def creer_filtres_histogramme() -> html.Div:
                 value="Tous",
                 clearable=False,
             ),
-            html.Label("Surface maximale des équipements"),
-            dcc.Dropdown(
-                id="filtre-surface",
-                options=[
-                    {
-                        "label": "10 800 m² — 95e percentile",
-                        "value": 10800,
-                    },
-                    {
-                        "label": "72 000 m² — 99e percentile",
-                        "value": 72000,
-                    },
-                ],
-                value=10800,
-                clearable=False,
-            ),
         ]
     )
 
@@ -82,20 +66,17 @@ def creer_layout_histogramme() -> html.Div:
 @callback(
     Output("histogramme-surfaces", "figure"),
     Input("filtre-nature", "value"),
-    Input("filtre-surface", "value"),
     Input("filtre-region", "value"),
 )
 def actualiser_histogramme(
     nature: str,
-    surface_max: int,
     region: str | None,
 ) -> Figure:
-    """Actualise l'histogramme selon les filtres choisis."""
+    """Actualise l'histogramme avec une échelle de surfaces fixe."""
 
     region_selectionnee = None if region in (None, TOUTE_LA_FRANCE) else region
 
     return creer_histogramme(
         nature=nature,
         region=region_selectionnee,
-        surface_max=surface_max,
     )
