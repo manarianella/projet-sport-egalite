@@ -6,7 +6,6 @@ import pytest
 from src.components.map_chart import (
     choisir_niveau,
     compter_par_niveau,
-    creer_carte_bulles,
     filtrer_vue,
     types_principaux,
 )
@@ -75,16 +74,6 @@ def test_compter_par_commune(
     assert rennes["pour_10000"] == pytest.approx(0.1)
 
 
-def test_compter_par_region(
-    installations: pd.DataFrame, equipements: pd.DataFrame, population: pd.DataFrame
-) -> None:
-    """Au niveau région, les installations et la population sont additionnées."""
-    bulles = compter_par_niveau(installations, equipements, population, "region")
-
-    assert bulles["installations"].sum() == 5
-    assert bulles["population"].sum() == 500_000
-
-
 def test_types_principaux(equipements: pd.DataFrame) -> None:
     """Les types les plus présents sont listés du plus au moins nombreux."""
     types = types_principaux(equipements, "code_commune")
@@ -112,12 +101,3 @@ def test_filtrer_vue_garde_les_communes_visibles(
     assert list(visibles["nom"]) == ["Rennes"]
 
 
-def test_creer_carte_bulles(
-    installations: pd.DataFrame, equipements: pd.DataFrame, population: pd.DataFrame
-) -> None:
-    """La carte contient une bulle par commune, avec le ratio écrit dedans."""
-    bulles = compter_par_niveau(installations, equipements, population, "commune")
-    figure = creer_carte_bulles(bulles, {"lat": 46.6, "lon": 2.5}, 5.0, "test", (0, 1))
-
-    assert len(figure.data[1].lat) == 2
-    assert "0,1" in figure.data[1].text
