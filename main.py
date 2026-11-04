@@ -18,20 +18,53 @@ from src.components.map_layout import (
 from src.utils.prepare_database import preparer_base
 
 
-def creer_statistique(identifiant: str, nom: str) -> html.Div:
-    """Crée une carte de statistique actualisable."""
-    return html.Div(
+def creer_statistique(
+    identifiant: str,
+    nom: str,
+    explication: str,
+    identifiant_ratio: str | None = None,
+) -> html.Div:
+    """Crée une carte statistique avec une aide au survol."""
+
+    contenu = [
+        html.Div(
+            "—",
+            id=identifiant,
+            className="valeur-statistique",
+        ),
+        html.Div(
+            nom,
+            className="nom-statistique",
+        ),
+    ]
+
+    if identifiant_ratio is not None:
+        contenu.append(
+            html.Div(
+                "— pour 10 000 habitants",
+                id=identifiant_ratio,
+                className="ratio-statistique",
+            )
+        )
+
+    contenu.extend(
         [
-            html.Div(
-                "—",
-                id=identifiant,
-                className="valeur-statistique",
+            html.Span(
+                "ⓘ",
+                className="stat-info-icon",
+                tabIndex=0,
+                role="img",
+                **{"aria-label": "Informations sur cette statistique"},
             ),
             html.Div(
-                nom,
-                className="nom-statistique",
+                explication,
+                className="stat-tooltip",
             ),
-        ],
+        ]
+    )
+
+    return html.Div(
+        contenu,
         className="carte-statistique",
     )
 
@@ -85,21 +118,6 @@ app.layout = html.Div(
                     ],
                     className="sidebar-section",
                 ),
-                html.Div(
-                    [
-                        html.Div(
-                            "03 — COMPARAISON",
-                            className="sidebar-section-titre",
-                        ),
-                        html.P(
-                            "Sous la carte, choisissez Équipements "
-                            "ou Installations dans le graphique "
-                            "de droite pour comparer les communes.",
-                            className="sidebar-aide",
-                        ),
-                    ],
-                    className="sidebar-section",
-                ),
             ],
             className="sidebar",
         ),
@@ -111,20 +129,34 @@ app.layout = html.Div(
                             "ÉTUDE TERRITORIALE • FRANCE",
                             className="entete-categorie",
                         ),
-                        html.H1("SportÉgalité"),
                         html.H3(
-                            "Toutes les communes françaises disposent-elles du "
-                            "même accès aux installations sportives ?",
+                            "Toutes les communes françaises disposent-elles du même accès aux installations sportives ?",
                             className="entete-problematique",
                         ),
                         html.P(
-                            "Ce tableau de bord analyse la répartition des "
-                            "installations et des équipements sportifs en France. "
-                            "À travers une carte interactive, un histogramme des "
-                            "surfaces et une comparaison entre communes, nous "
-                            "cherchons à mettre en évidence les disparités "
-                            "territoriales dans l'offre sportive.",
+                            "Ce dashboard explore la répartition des installations et des équipements sportifs en France. "
+                            "Il permet d’observer les écarts entre territoires, d’analyser les surfaces sportives et de comparer les communes en tenant compte de leur population.",
                             className="entete-introduction",
+                        ),
+                        html.Div(
+                            [
+                                html.A(
+                                    "01 — Explorer le territoire",
+                                    href="#section-territoire",
+                                    className="hero-badge hero-link",
+                                ),
+                                html.A(
+                                    "02 — Analyser les surfaces",
+                                    href="#section-surfaces",
+                                    className="hero-badge hero-link",
+                                ),
+                                html.A(
+                                    "03 — Comparer les communes",
+                                    href="#section-comparaison",
+                                    className="hero-badge hero-link",
+                                ),
+                            ],
+                            className="hero-badges",
                         ),
                     ],
                     className="entete-dashboard",
@@ -134,66 +166,83 @@ app.layout = html.Div(
                         creer_statistique(
                             "stat-equipements",
                             "Équipements sportifs",
+                            "Un équipement est un espace de pratique sportive, "
+                            "comme un terrain de football, une piscine ou un court "
+                            "de tennis. Une installation peut contenir plusieurs "
+                            "équipements.",
+                            "stat-ratio-equipements",
                         ),
                         creer_statistique(
                             "stat-installations",
                             "Installations sportives",
+                            "Une installation est un lieu regroupant un ou plusieurs "
+                            "équipements sportifs. Par exemple, un complexe sportif "
+                            "peut contenir un gymnase et plusieurs terrains.",
+                            "stat-ratio-installations",
                         ),
                         creer_statistique(
                             "stat-communes",
                             "Communes représentées",
+                            "Nombre de communes distinctes disposant d'au moins "
+                            "un équipement recensé dans le territoire sélectionné. "
+                            "Cela ne correspond pas forcément à toutes les communes "
+                            "du territoire.",
                         ),
                     ],
                     className="grille-statistiques",
                 ),
                 html.Section(
                     [
-                        html.H2("Répartition géographique des installations sportives"),
-                        html.P(
-                            "Explorez la localisation et la "
-                            "concentration des installations "
-                            "selon la région sélectionnée.",
-                            className="description-graphique",
+                        html.P("01 — TERRITOIRE", className="bloc-section-label"),
+                        html.H2(
+                            " Répartition géographique des installations sportives",
                         ),
+                        html.P("CARTE INTERACTIVE", className="type-visualisation"),
                         creer_graphique_carte(),
                     ],
-                    className="carte-graphique",
+                    id="section-territoire",
+                    className="carte-graphique section-principale",
                 ),
                 html.Div(
                     [
                         html.Section(
                             [
-                                html.H2("Distribution des surfaces"),
+                                html.P(
+                                    "02 - SURFACES SPORTIVES",
+                                    className="bloc-section-label",
+                                ),
+                                html.H2(
+                                    " Distribution des surfaces sportives",
+                                ),
                                 html.Div(
                                     id="resume-filtres-surfaces",
                                     className="resume-filtres-surfaces",
                                 ),
-                                html.P(
-                                    "Répartition des surfaces "
-                                    "des équipements sportifs "
-                                    "selon les filtres sélectionnés.",
-                                    className="description-graphique",
-                                ),
+                                html.P("HISTOGRAMME", className="type-visualisation"),
                                 creer_graphique_histogramme(),
                             ],
-                            className="carte-graphique",
+                            id="section-surfaces",
+                            className="carte-graphique section-secondaire",
                         ),
                         html.Section(
                             [
-                                html.H2("Comparaison entre communes"),
                                 html.P(
-                                    "Ce graphique réunit les cinq communes les mieux dotées "
-                                    "en équipements et les cinq mieux dotées en installations "
-                                    "pour 10 000 habitants. Seules les communes d'au moins "
-                                    "1 000 habitants sont prises en compte.",
-                                    className="description-graphique",
+                                    "03 — COMPARAISON", className="bloc-section-label"
+                                ),
+                                html.H2(
+                                    " Comparaison entre communes",
+                                ),
+                                html.P(
+                                    "DIAGRAMME EN BARRES",
+                                    className="type-visualisation",
                                 ),
                                 dcc.Graph(
                                     id="graphique-inegalites",
                                     config={"displaylogo": False},
                                 ),
                             ],
-                            className="carte-graphique",
+                            id="section-comparaison",
+                            className="carte-graphique section-comparaison",
                         ),
                     ],
                     className="grille-analyses",
@@ -210,12 +259,14 @@ app.layout = html.Div(
     Output("stat-equipements", "children"),
     Output("stat-installations", "children"),
     Output("stat-communes", "children"),
+    Output("stat-ratio-equipements", "children"),
+    Output("stat-ratio-installations", "children"),
     Input("filtre-region", "value"),
 )
 def actualiser_statistiques(
     region: str | None,
-) -> tuple[str, str, str]:
-    """Actualise les chiffres clés du territoire."""
+) -> tuple[str, str, str, str, str]:
+    """Actualise les statistiques et les ratios par habitant."""
 
     toutes_regions = region in (None, TOUTE_LA_FRANCE)
 
@@ -232,6 +283,15 @@ def actualiser_statistiques(
             nb_communes = connexion.execute(
                 'SELECT COUNT(DISTINCT code_commune) FROM "cleaned"'
             ).fetchone()[0]
+
+            population = connexion.execute(
+                """
+                SELECT SUM(CAST(population AS INTEGER))
+                FROM cleaned_population
+                WHERE population IS NOT NULL
+                """
+            ).fetchone()[0]
+
         else:
             nb_equipements = connexion.execute(
                 'SELECT COUNT(*) FROM "cleaned" WHERE region = ?',
@@ -256,10 +316,34 @@ def actualiser_statistiques(
                 (region,),
             ).fetchone()[0]
 
+            population = connexion.execute(
+                """
+                SELECT SUM(CAST(population AS INTEGER))
+                FROM cleaned_population
+                WHERE nom_region = ?
+                """,
+                (region,),
+            ).fetchone()[0]
+
+    def formater_nombre(nombre: int) -> str:
+        return f"{nombre:,}".replace(",", " ")
+
+    def formater_ratio(nombre: int, habitants: int | None) -> str:
+        if not habitants or habitants <= 0:
+            return "Population indisponible"
+
+        ratio = nombre / habitants * 10000
+        valeur = f"{ratio:,.1f}"
+        valeur = valeur.replace(",", " ").replace(".", ",")
+
+        return f"{valeur} pour 10 000 habitants"
+
     return (
-        f"{nb_equipements:,}".replace(",", " "),
-        f"{nb_installations:,}".replace(",", " "),
-        f"{nb_communes:,}".replace(",", " "),
+        formater_nombre(nb_equipements),
+        formater_nombre(nb_installations),
+        formater_nombre(nb_communes),
+        formater_ratio(nb_equipements, population),
+        formater_ratio(nb_installations, population),
     )
 
 

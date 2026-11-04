@@ -1,4 +1,5 @@
 """Composant Dash interactif pour la carte des installations sportives."""
+
 import pandas as pd
 import plotly.graph_objects as go
 from dash import Dash, Input, Output, callback, ctx, dcc, html
@@ -31,6 +32,9 @@ def creer_filtre_region() -> html.Div:
                 options=lister_regions(),
                 value=TOUTE_LA_FRANCE,
                 clearable=False,
+                maxHeight=420,
+                optionHeight=38,
+                searchable=True,
             ),
         ]
     )
