@@ -9,7 +9,6 @@ import plotly.graph_objects as go
 
 from config import DATABASE_PATH
 
-
 # Colonne de regroupement et nom affiché, pour chaque niveau de zoom
 CLES_NIVEAUX = {"region": "region", "departement": "code_departement", "commune": "code_commune"}
 NOMS_NIVEAUX = {"region": "region", "departement": "departement", "commune": "nom_commune"}
