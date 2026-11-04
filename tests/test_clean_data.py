@@ -1,6 +1,8 @@
 """Tests du nettoyage des équipements sportifs."""
 
 import sqlite3
+from contextlib import closing
+from pathlib import Path
 
 import pandas as pd
 import pytest
@@ -71,3 +73,38 @@ def test_nombre_lignes(base_temporaire):
         ]
 
     assert nombre_raw == nombre_cleaned == 6
+
+
+def test_nettoyer_population(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """Le nettoyage renomme les colonnes, garde les populations valides et sans doublon."""
+    base_test = tmp_path / "test.sqlite"
+    monkeypatch.setattr(clean_data, "DATABASE_PATH", base_test)
+
+    brut = pd.DataFrame(
+        {
+            "code": ["35238", "59350", "35238", "99999", "88888"],
+            "nom": ["Rennes", "Lille", "Rennes", "Sans population", "Vide"],
+            "population": ["227830", "236710", "227830", "0", None],
+            "codeDepartement": ["35", "59", "35", "99", "88"],
+            "codeRegion": ["53", "32", "53", "00", "00"],
+            "region.nom": ["Bretagne", "Hauts-de-France", "Bretagne", "X", "Y"],
+        }
+    )
+    with closing(sqlite3.connect(base_test)) as connexion:
+        brut.to_sql("raw_population", connexion, index=False)
+
+    clean_data.nettoyer_population()
+
+    with closing(sqlite3.connect(base_test)) as connexion:
+        propre = pd.read_sql_query("SELECT * FROM cleaned_population", connexion)
+
+    assert list(propre.columns) == [
+        "code_commune",
+        "nom_commune",
+        "population",
+        "code_departement",
+        "code_region",
+        "nom_region",
+    ]
+    assert sorted(propre["nom_commune"]) == ["Lille", "Rennes"]
+    assert propre.set_index("code_commune").loc["35238", "population"] == 227830
