@@ -116,3 +116,72 @@
         overflow-y: visible;
     }
 }
+
+.sidebar {
+    background: linear-gradient(180deg, #0f2f59 0%, #0b2547 100%);
+    color: #ffffff;
+    border-top-right-radius: 28px;
+    border-bottom-right-radius: 28px;
+    padding: 28px 24px;
+    box-shadow: 6px 0 22px rgba(10, 25, 47, 0.14);
+}
+
+.sidebar-logo {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: #78e0da;
+    margin-bottom: 22px;
+    letter-spacing: -0.02em;
+}
+
+.sidebar-titre {
+    font-size: 1.15rem;
+    font-weight: 700;
+    line-height: 1.4;
+    color: #ffffff;
+    margin-bottom: 28px;
+}
+
+.sidebar-section {
+    margin-bottom: 28px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.10);
+}
+
+.sidebar-section-titre {
+    font-size: 0.95rem;
+    font-weight: 800;
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+    color: #6fd8d3;
+    margin-bottom: 14px;
+}
+
+.sidebar-aide {
+    color: rgba(255, 255, 255, 0.82);
+    font-size: 0.98rem;
+    line-height: 1.7;
+    margin-top: 14px;
+}
+
+
+/* Afficher les listes déroulantes sans les couper */
+
+.sidebar {
+    overflow: visible;
+}
+
+.sidebar-section {
+    position: relative;
+    overflow: visible;
+}
+
+.sidebar-section:focus-within {
+    z-index: 100;
+}
+
+/* Menu déroulant au-dessus des autres éléments */
+
+.sidebar .Select-menu-outer {
+    z-index: 2000;
+}
