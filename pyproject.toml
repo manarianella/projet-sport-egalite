@@ -17,3 +17,11 @@ dev = [
     "radon>=6.0.1",
     "ruff>=0.17.1",
 ]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+
+
+[tool.mypy]
+ignore_missing_imports = true

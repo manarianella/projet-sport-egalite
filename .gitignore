@@ -19,3 +19,19 @@ __pycache__/
 # Données brutes volumineuses
 data/raw/*
 !data/raw/.gitkeep
+
+# Base SQLite locale en cours de développement
+data/db.sqlite
+
+# Fichier de test de la carte
+carte_test.html
+
+# Sauvegardes locales et anciens essais
+*.bak
+main_backup.py
+test_histogram_dash.py
+data/db_avant_jointure.sqlite
+
+sauvegardes_locales/
+
+

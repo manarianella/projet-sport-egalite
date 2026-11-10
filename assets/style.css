@@ -1,0 +1,901 @@
+
+/* SportÉgalité — Identité visuelle */
+
+:root {
+    --bleu-nuit: #102747;
+    --bleu: #4387D2;
+    --fond: #F4F7FC;
+    --blanc: #FFFFFF;
+    --texte: #142D4E;
+    --bordure: #E2EAF5;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: var(--fond);
+    color: var(--texte);
+    font-family: Arial, sans-serif;
+}
+
+/* Structure principale */
+
+.dashboard {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* Menu de gauche */
+
+
+.sidebar {
+    position: sticky;
+    top: 0;
+    align-self: flex-start;
+
+    width: 280px;
+    min-width: 280px;
+    height: 100vh;
+    overflow-y: auto;
+
+    padding: 32px 22px;
+    background: var(--bleu-nuit);
+    color: var(--blanc);
+}
+
+
+.sidebar-logo {
+    font-size: 26px;
+    font-weight: 700;
+    margin-bottom: 45px;
+}
+
+.sidebar-titre {
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 22px;
+}
+
+.sidebar label {
+    display: block;
+    margin: 20px 0 8px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+/* Zone principale */
+
+.contenu-principal {
+    flex: 1;
+    min-width: 0;
+    padding: 32px;
+}
+
+.entete-dashboard {
+    padding: 30px;
+    margin-bottom: 24px;
+    background: var(--blanc);
+    border: 1px solid var(--bordure);
+    border-radius: 18px;
+}
+
+.entete-dashboard h1 {
+    margin: 0;
+    font-size: 36px;
+    color: var(--bleu-nuit);
+}
+
+.entete-dashboard p {
+    color: #61748F;
+    font-size: 16px;
+}
+
+/* Cartes */
+
+.grille-statistiques {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+    margin-bottom: 24px;
+}
+
+.carte-statistique,
+.carte-graphique {
+    background: var(--blanc);
+    border: 1px solid var(--bordure);
+    border-radius: 18px;
+    box-shadow: 0 5px 20px rgba(20, 45, 78, 0.05);
+}
+
+.carte-statistique {
+    padding: 24px;
+}
+
+.valeur-statistique {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--bleu-nuit);
+}
+
+.nom-statistique {
+    margin-top: 6px;
+    font-size: 14px;
+    color: #61748F;
+}
+
+.carte-graphique {
+    padding: 24px;
+    margin-bottom: 24px;
+}
+
+.carte-graphique h2 {
+    color: var(--bleu-nuit);
+}
+
+/* Écrans plus petits */
+
+@media (max-width: 1000px) {
+    .sidebar {
+        width: 230px;
+        min-width: 230px;
+    }
+
+    .contenu-principal {
+        padding: 20px;
+    }
+
+    .grille-statistiques {
+        grid-template-columns: 1fr;
+    }
+
+    .sidebar {
+    position: static;
+    height: auto;
+    overflow-y: visible;
+    }
+}
+
+@media (max-width: 700px) {
+    .dashboard {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        min-width: 0;
+        min-height: auto;
+    }
+
+    .contenu-principal {
+        padding: 14px;
+    }
+}
+
+
+/* Menus déroulants Dash 4 — Texte sélectionné */
+
+.sidebar .dash-dropdown-trigger,
+.sidebar .dash-dropdown-value,
+.sidebar .dash-dropdown-value-item {
+    color: #142D4E !important;
+    -webkit-text-fill-color: #142D4E !important;
+}
+
+.sidebar .dash-dropdown-value-item {
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+.sidebar .dash-dropdown-trigger {
+    background-color: #FFFFFF !important;
+    border-radius: 8px;
+}
+
+.sidebar .dash-dropdown-value {
+    background-color: transparent !important;
+}
+
+
+/* Finitions du dashboard */
+
+.contenu-principal {
+    padding: 30px;
+    max-width: 1600px;
+}
+
+.entete-dashboard {
+    padding: 26px 32px;
+    margin-bottom: 20px;
+}
+
+.entete-dashboard h1 {
+    font-size: 32px;
+    letter-spacing: -0.8px;
+}
+
+.grille-statistiques {
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.carte-statistique {
+    padding: 22px 24px;
+}
+
+.valeur-statistique {
+    font-size: 30px;
+    letter-spacing: -0.6px;
+}
+
+.carte-graphique {
+    padding: 22px 26px;
+    margin-bottom: 20px;
+}
+
+.carte-graphique h2 {
+    font-size: 21px;
+    margin: 0 0 16px;
+}
+
+.carte-graphique .dash-graph {
+    width: 100%;
+}
+
+@media (max-width: 700px) {
+    .contenu-principal {
+        padding: 14px;
+    }
+
+    .carte-graphique {
+        padding: 16px;
+    }
+}
+
+
+/* Titres et descriptions des graphiques */
+
+.carte-graphique h2 {
+    margin: 0 0 8px;
+    font-size: 21px;
+    font-weight: 700;
+    letter-spacing: -0.4px;
+    color: #102747;
+}
+
+.description-graphique {
+    margin: 0 0 18px;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #61748F;
+}
+
+/* Cartes du dashboard */
+
+.carte-statistique,
+.carte-graphique {
+    transition: box-shadow 0.2s ease;
+}
+
+.carte-statistique:hover,
+.carte-graphique:hover {
+    box-shadow: 0 8px 25px rgba(20, 45, 78, 0.09);
+}
+
+.valeur-statistique {
+    font-variant-numeric: tabular-nums;
+}
+
+/* Séparation harmonieuse des graphiques */
+
+.carte-graphique {
+    overflow: hidden;
+}
+
+
+/* Organisation de la barre latérale */
+
+.sidebar-section {
+    padding: 18px 0 24px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.sidebar-section-titre {
+    color: #80C7F5;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1.3px;
+    margin-bottom: 16px;
+}
+
+.sidebar-aide {
+    margin: 12px 0 0;
+    color: #A9BED9;
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+.sidebar-section label {
+    font-size: 13px;
+    line-height: 1.4;
+    margin-top: 12px;
+}
+
+.sidebar-titre {
+    color: #DAE9FB;
+    margin-bottom: 14px;
+}
+
+/* Petite touche de couleur pour les statistiques */
+
+.carte-statistique:nth-child(1) {
+    border-top: 4px solid #4387D2;
+}
+
+.carte-statistique:nth-child(2) {
+    border-top: 4px solid #16A6A1;
+}
+
+.carte-statistique:nth-child(3) {
+    border-top: 4px solid #F0A35B;
+}
+
+
+
+/* Tableau de comparaison des communes */
+
+.conteneur-tableau {
+    width: 100%;
+    overflow-x: auto;
+    margin-top: 18px;
+}
+
+.tableau-communes {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.tableau-communes thead {
+    background: #EDF4FC;
+}
+
+.tableau-communes th {
+    padding: 16px 20px;
+    color: #102747;
+    text-align: left;
+    font-weight: 700;
+    border-bottom: 2px solid #DCE8F5;
+}
+
+.tableau-communes td {
+    padding: 15px 20px;
+    border-bottom: 1px solid #E8EEF6;
+    color: #142D4E;
+}
+
+.tableau-communes tbody tr:nth-child(even) {
+    background: #F8FAFD;
+}
+
+.tableau-communes tbody tr:hover {
+    background: #EAF4FF;
+}
+
+.tableau-communes td:first-child {
+    color: #4387D2;
+    font-weight: 700;
+    width: 80px;
+}
+
+.tableau-communes th:last-child,
+.tableau-communes td:last-child {
+    text-align: right;
+    font-weight: 600;
+}
+
+.tableau-communes tbody tr:last-child td {
+    border-bottom: none;
+}
+
+
+/* Sélecteur des modes d'analyse */
+
+.choix-analyse {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 14px 0 20px;
+}
+
+.choix-analyse label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 11px 16px;
+    background: #EDF4FC;
+    border: 1px solid #DCE8F5;
+    border-radius: 9px;
+    color: #142D4E;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.choix-analyse label:has(input:checked) {
+    background: #D7F3F0;
+    border-color: #16A6A1;
+    color: #087D79;
+}
+
+.choix-analyse input {
+    accent-color: #16A6A1;
+}
+
+
+/* Présentation du projet SportÉgalité */
+
+.entete-categorie {
+    color: #16A6A1 !important;
+    font-size: 12px !important;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    margin: 0 0 12px;
+}
+
+.entete-dashboard h1 {
+    font-size: 32px;
+    margin: 0 0 16px;
+}
+
+.entete-problematique {
+    font-size: 19px;
+    font-weight: 700;
+    line-height: 1.5;
+    color: #102747;
+    margin: 0 0 12px;
+}
+
+.entete-introduction {
+    max-width: 900px;
+    font-size: 14px !important;
+    line-height: 1.8;
+    color: #61748F;
+    margin: 0;
+}
+
+body {
+    background: #f4f7fb;
+    font-family: "Inter", "Segoe UI", Arial, sans-serif;
+    color: #142d4e;
+}
+
+.dashboard {
+    background: #f4f7fb;
+}
+
+.contenu-principal {
+    padding: 34px 34px 48px 34px;
+    gap: 24px;
+}
+
+.entete-dashboard {
+    background: linear-gradient(135deg, #ffffff 0%, #f8fbff 100%);
+    border: 1px solid #e3ebf5;
+    border-radius: 28px;
+    padding: 34px 36px;
+    box-shadow: 0 10px 30px rgba(20, 45, 78, 0.06);
+    margin-bottom: 22px;
+}
+
+.entete-categorie {
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #0aa3a3;
+    margin-bottom: 10px;
+}
+
+.entete-titre {
+    font-size: 3rem;
+    font-weight: 800;
+    margin: 0 0 10px 0;
+    color: #102b52;
+}
+
+.entete-problematique {
+    font-size: 1.95rem;
+    line-height: 1.25;
+    font-weight: 750;
+    margin-bottom: 16px;
+    color: #102b52;
+    max-width: 1000px;
+}
+
+.entete-introduction {
+    font-size: 1.08rem;
+    line-height: 1.75;
+    color: #58708f;
+    max-width: 1000px;
+    margin-bottom: 20px;
+}
+
+.hero-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 12px;
+}
+
+.hero-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 16px;
+    border-radius: 999px;
+    background: #ecf8f7;
+    color: #0d8d8d;
+    border: 1px solid #cceeee;
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+
+.grille-statistiques {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    margin-bottom: 22px;
+}
+
+.carte-statistique {
+    background: #ffffff;
+    border-radius: 24px;
+    padding: 26px 28px;
+    border: 1px solid #e3ebf5;
+    box-shadow: 0 10px 24px rgba(20, 45, 78, 0.05);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.carte-statistique:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 30px rgba(20, 45, 78, 0.08);
+}
+
+.valeur-statistique {
+    font-size: 3rem;
+    font-weight: 800;
+    color: #102b52;
+    line-height: 1;
+    margin-bottom: 10px;
+}
+
+.nom-statistique {
+    font-size: 1.1rem;
+    color: #637b98;
+    font-weight: 500;
+}
+
+.carte-graphique {
+    background: #ffffff;
+    border: 1px solid #e3ebf5;
+    border-radius: 28px;
+    padding: 26px 26px 20px 26px;
+    box-shadow: 0 12px 28px rgba(20, 45, 78, 0.05);
+}
+
+.section-principale,
+.section-secondaire,
+.section-comparaison {
+    position: relative;
+}
+
+.bloc-section-label {
+    font-size: 0.92rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #0aa3a3;
+    margin-bottom: 8px;
+}
+
+.carte-graphique h2 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+    color: #102b52;
+    font-weight: 780;
+}
+
+.description-graphique {
+    font-size: 1.05rem;
+    color: #5f7591;
+    line-height: 1.65;
+    margin-bottom: 18px;
+}
+
+.resume-filtres-surfaces {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 14px;
+}
+
+.filtre-indicateur {
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 14px;
+    background: #eef8f8;
+    color: #0d8d8d;
+    border: 1px solid #cdeeee;
+    border-radius: 999px;
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+
+.grille-analyses {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    align-items: start;
+}
+
+
+/* =========================================
+   SPORTÉGALITÉ — AMÉLIORATIONS INTERFACE
+   ========================================= */
+
+/* Navigation fluide entre les graphiques */
+
+html {
+    scroll-behavior: smooth;
+}
+
+.hero-link {
+    text-decoration: none;
+    cursor: pointer;
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.hero-link:hover {
+    background: #d6f3f0;
+    color: #086f70;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(15, 165, 159, 0.12);
+}
+
+.hero-link:focus-visible {
+    outline: 3px solid #0aa3a3;
+    outline-offset: 3px;
+}
+
+/* Mise en évidence du graphique sélectionné */
+
+#section-territoire,
+#section-surfaces,
+#section-comparaison {
+    scroll-margin-top: 28px;
+    transition:
+        box-shadow 0.3s ease,
+        border-color 0.3s ease;
+}
+
+#section-territoire:target,
+#section-surfaces:target,
+#section-comparaison:target {
+    border-color: #0aa3a3;
+    box-shadow:
+        0 0 0 3px rgba(10, 163, 163, 0.16),
+        0 12px 30px rgba(20, 45, 78, 0.08);
+}
+
+/* Titres et sous-titres des visualisations */
+
+.carte-graphique h2 {
+    font-size: clamp(1.25rem, 1.6vw, 1.65rem);
+    line-height: 1.3;
+    letter-spacing: -0.025em;
+}
+
+.type-visualisation {
+    display: inline-flex;
+    align-items: center;
+    margin: 4px 0 14px;
+    padding: 6px 11px;
+    background: #edf8f7;
+    border: 1px solid #d1eeec;
+    border-radius: 8px;
+    color: #078d8a;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+}
+
+/* Cartes statistiques */
+
+.carte-statistique {
+    position: relative;
+    min-width: 0;
+    overflow: visible;
+}
+
+.ratio-statistique {
+    display: inline-flex;
+    margin-top: 12px;
+    padding: 7px 11px;
+    color: #087f7b;
+    background: #e7f7f4;
+    border-radius: 9px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    line-height: 1.4;
+}
+
+/* Petite icône explicative */
+
+.stat-info-icon {
+    position: absolute;
+    top: 18px;
+    right: 20px;
+    display: grid;
+    place-items: center;
+    width: 27px;
+    height: 27px;
+    border-radius: 50%;
+    background: #eaf2fa;
+    color: #426a93;
+    font-size: 17px;
+    cursor: help;
+}
+
+.stat-info-icon:hover,
+.stat-info-icon:focus-visible {
+    color: #ffffff;
+    background: #0aa3a3;
+    outline: none;
+}
+
+/* Bulle explicative */
+
+.stat-tooltip {
+    position: absolute;
+    bottom: calc(100% + 12px);
+    right: 8px;
+    width: min(315px, 85vw);
+    max-width: 315px;
+    padding: 16px 18px;
+    border-radius: 15px;
+    background: #102b4f;
+    color: #ffffff;
+    font-size: 0.85rem;
+    font-weight: 400;
+    line-height: 1.65;
+    box-shadow: 0 12px 30px rgba(9, 30, 58, 0.24);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(7px);
+    transition:
+        opacity 0.2s ease,
+        transform 0.2s ease,
+        visibility 0.2s ease;
+    z-index: 1000;
+}
+
+/* Petite flèche sous la bulle */
+
+.stat-tooltip::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    right: 25px;
+    border: 8px solid transparent;
+    border-top-color: #102b4f;
+}
+
+.stat-info-icon:hover + .stat-tooltip,
+.stat-info-icon:focus-visible + .stat-tooltip {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+/* Menus déroulants Dash / React Select */
+
+.sidebar .Select-control {
+    min-height: 49px;
+    border-radius: 10px;
+    border: 1px solid #cfdef0;
+    box-shadow: none;
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.sidebar .is-focused > .Select-control {
+    border-color: #24bcb2;
+    box-shadow: 0 0 0 3px rgba(36, 188, 178, 0.17);
+}
+
+.sidebar .Select-menu-outer {
+    max-height: 390px !important;
+    border-radius: 12px;
+    box-shadow: 0 12px 28px rgba(7, 26, 51, 0.20);
+    z-index: 1100;
+}
+
+.sidebar .Select-menu {
+    max-height: 375px !important;
+}
+
+.sidebar .VirtualizedSelectOption {
+    font-size: 0.88rem;
+    padding: 12px 10px;
+}
+
+.sidebar .VirtualizedSelectFocusedOption {
+    background: #e4f7f4;
+    color: #076b69;
+}
+
+.sidebar .Select-placeholder,
+.sidebar .Select-value-label {
+    font-size: 0.92rem;
+}
+
+/* Adapter le contenu aux tailles d'écran */
+
+@media (max-width: 1100px) {
+    .grille-analyses {
+        grid-template-columns: 1fr;
+    }
+
+    .carte-graphique h2 {
+        font-size: 1.35rem;
+    }
+}
+
+@media (max-width: 700px) {
+    .grille-statistiques {
+        grid-template-columns: 1fr;
+    }
+
+    .hero-badges {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .hero-link {
+        justify-content: center;
+    }
+
+    .entete-problematique {
+        font-size: 1.5rem;
+    }
+
+    .stat-tooltip {
+        right: 0;
+        max-width: 250px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    .hero-link,
+    .stat-tooltip {
+        transition: none;
+    }
+}
+
+.carte-statistique:hover .stat-tooltip,
+.carte-statistique:focus-within .stat-tooltip {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
