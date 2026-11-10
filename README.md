@@ -213,10 +213,6 @@ Enfin, l'ensemble des indicateurs se met à jour lorsqu'une autre région est s�
 
 ![Carte interactive des installations sportives en Bretagne](docs/images/dashboard_carte_region.png)
 
-#### 1.7.2. Carte interactive des installations sportives
-
-![Carte interactive des installations sportives](docs/images/dashboard_carte_region.png)
-
 *Figure 2 — Carte interactive représentant la répartition territoriale des installations sportives, à l'aide de marqueurs regroupés et d'une échelle de couleur.*
 
 La carte constitue la première visualisation de notre dashboard. Elle représente les installations sportives et les rapporte à la population, pour comparer les territoires entre eux.
@@ -257,10 +253,6 @@ Il faut néanmoins distinguer la présence d'installations de leur accessibilit�
 
 ![Histogramme des surfaces des équipements sportifs](docs/images/histogramme_surfaces.png)
 
-#### 1.7.3. Histogramme des surfaces des équipements sportifs
-
-![Histogramme des surfaces des équipements sportifs](docs/images/histogramme_surfaces.png)
-
 *Figure 3 — Histogramme présentant la distribution des surfaces des équipements sportifs, avec les filtres de région et de nature ainsi qu'une plage de surfaces fixe.*
 
 La deuxième visualisation est un histogramme consacré aux surfaces des équipements sportifs. Nous avons choisi cette représentation pour étudier la manière dont les équipements se répartissent selon la taille de leur aire de pratique.
@@ -291,10 +283,6 @@ Cette distribution suggère que les équipements de petite ou moyenne surface so
 Enfin, les surfaces manquantes, nulles, négatives ou non exploitables ne sont pas utilisées pour construire l'histogramme. Elles ne sont pas nécessairement supprimées de la base, car les équipements concernés peuvent rester utiles pour les autres analyses.
 
 Nous avons donc cherché à obtenir un graphique à la fois lisible, interactif et cohérent pour comparer les surfaces sportives entre régions.
-
-#### 1.7.4. Comparaison entre communes
-
-![Comparaison des équipements et des installations par commune](docs/images/comparaison_equip_insta.png)
 
 #### 1.7.4. Comparaison entre communes
 
@@ -368,15 +356,6 @@ Des éléments tels que les distances, les temps de trajet, les horaires, les ta
 SportÉgalité permet ainsi de mettre en évidence des différences de répartition de l'offre sportive en France et constitue un point de départ pour réfléchir aux inégalités territoriales d'accès à la pratique sportive.
 
 ### 1.8. Vidéo de démonstration
-
-**À compléter avant le rendu :** la vidéo commentée n'a pas encore été confirmée et le lien ci-dessous doit être remplacé.
-
-Le professeur demande une vidéo **de 4 minutes maximum, à vitesse réelle**, comprenant :
-
-1. **Une minute maximum** de présentation des fonctionnalités et interactions du dashboard : navigation, indicateurs, filtres, carte, histogramme et comparaison.
-2. **Trois minutes maximum** consacrées au code et aux technologies effectivement utilisées : récupération et préparation des données, Pandas, SQLite, callbacks Dash, tests unitaires et outils de qualité. Il faut montrer où ces éléments se trouvent dans le projet et expliquer leur rôle.
-
-La vidéo doit être publiée sur une plateforme de partage vidéo. Le **fichier vidéo ne doit pas être ajouté au dépôt Git**.
 
 **[Visionner la démonstration de SportÉgalité](URL_DE_LA_VIDEO)**
 
@@ -550,7 +529,7 @@ Le fichier SQLite utilisé pendant l'exécution est `data/db.sqlite`. Une archiv
 
 Lors de l'ouverture, `preparer_base()` permet de restaurer la base à partir de l'archive lorsqu'elle manque. Cette organisation doit permettre de lancer l'application sans connexion Internet ni nouveau téléchargement des sources.
 
-Pour garantir la reproductibilité, nous devons vérifier :
+Pour garantir la reproductibilité du projet, nous avons vérifié les points suivants :
 
 - que l'archive est bien présente dans la version finale du dépôt ;
 - qu'elle contient les **six tables** attendues, avec des populations exploitables ;
@@ -816,7 +795,7 @@ Nous avons utilisé GitLab pour collaborer sur SportÉgalité, avec les branches
 
 Les modifications sont enregistrées sous forme de commits sur les branches individuelles, puis proposées à `dev` au moyen de Merge Requests. Cette organisation permet de développer séparément les composants, de revoir les changements et de limiter les conflits avant la fusion finale dans `main`.
 
-L'historique Git permet également de retrouver les contributions de chaque membre. Avant le rendu, nous devrons confirmer que les dernières contributions ont bien été intégrées dans `main`.
+L'historique Git permet également de retrouver les contributions de chaque membre. Les contributions développées sur nos branches individuelles ont été intégrées dans la branche commune dev, puis fusionnées dans main pour constituer la version finale du projet.
 
 ---
 
@@ -846,7 +825,7 @@ Nos principaux résultats sont les suivants :
 
 Ces résultats mesurent une **dotation par habitant**, et non l'accès réel à la pratique sportive.
 
-Pour approfondir ces observations, nous avons prévu un rapport détaillé :
+Pour approfondir ces observations, le rapport détaillé est disponible ici : 
 
 **[Consulter le rapport d'analyse complet de SportÉgalité](docs/rapport_analyse.md)**
 
