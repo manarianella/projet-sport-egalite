@@ -357,7 +357,7 @@ SportÉgalité permet ainsi de mettre en évidence des différences de répartit
 
 ### 1.8. Vidéo de démonstration
 
-**[Visionner la démonstration de SportÉgalité](URL_DE_LA_VIDEO)**
+**[Visionner la démonstration de SportÉgalité](https://vimeo.com/1245515594/7c8c3ca499?share=copy&fl=sv&fe=ci)**
 
 ---
 
