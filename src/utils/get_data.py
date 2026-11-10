@@ -6,6 +6,7 @@ dans data/raw/ et dans une table « raw » SQLite par source :
 - les équipements sportifs -> table raw ;
 - les installations sportives -> table raw_installations.
 """
+
 import json
 import sqlite3
 from contextlib import closing
@@ -131,9 +132,11 @@ def importer_installations_sqlite() -> None:
 
     print("Importation SQLite des installations terminée.")
 
+
 def telecharger_population() -> None:
     """Télécharge la population des communes depuis l'API Découpage administratif."""
     telecharger_fichier(POPULATION_URL, POPULATION_JSON)
+
 
 def importer_population_sqlite() -> None:
     """Enregistre la population brute des communes dans la table raw_population."""
@@ -158,6 +161,7 @@ def importer_population_sqlite() -> None:
         connexion.commit()
 
     print("Importation SQLite de la population terminée.")
+
 
 if __name__ == "__main__":
     telecharger_equipements()

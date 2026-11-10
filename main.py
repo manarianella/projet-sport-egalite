@@ -26,7 +26,7 @@ def creer_statistique(
 ) -> html.Div:
     """Crée une carte statistique avec une aide au survol."""
 
-    contenu = [
+    contenu: list[html.Div | html.Span] = [
         html.Div(
             "—",
             id=identifiant,
@@ -54,7 +54,7 @@ def creer_statistique(
                 className="stat-info-icon",
                 tabIndex=0,
                 role="img",
-                **{"aria-label": "Informations sur cette statistique"},
+                title="Informations sur cette statistique",
             ),
             html.Div(
                 explication,
@@ -130,12 +130,15 @@ app.layout = html.Div(
                             className="entete-categorie",
                         ),
                         html.H3(
-                            "Toutes les communes françaises disposent-elles du même accès aux installations sportives ?",
+                            "Toutes les communes françaises disposent-elles "
+                            "du même accès aux installations sportives ?",
                             className="entete-problematique",
                         ),
                         html.P(
                             "Ce dashboard explore la répartition des installations et des équipements sportifs en France. "
-                            "Il permet d’observer les écarts entre territoires, d’analyser les surfaces sportives et de comparer les communes en tenant compte de leur population.",
+                            "Il permet d’observer les écarts entre territoires, "
+                            "d’analyser les surfaces sportives et de comparer les communes"
+                            " en tenant compte de leur population.",
                             className="entete-introduction",
                         ),
                         html.Div(

@@ -167,9 +167,6 @@
 
 /* Afficher les listes déroulantes sans les couper */
 
-.sidebar {
-    overflow: visible;
-}
 
 .sidebar-section {
     position: relative;

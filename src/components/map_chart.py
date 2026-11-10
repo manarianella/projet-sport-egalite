@@ -10,8 +10,16 @@ import plotly.graph_objects as go
 from config import DATABASE_PATH
 
 # Colonne de regroupement et nom affiché, pour chaque niveau de zoom
-CLES_NIVEAUX = {"region": "region", "departement": "code_departement", "commune": "code_commune"}
-NOMS_NIVEAUX = {"region": "region", "departement": "departement", "commune": "nom_commune"}
+CLES_NIVEAUX = {
+    "region": "region",
+    "departement": "code_departement",
+    "commune": "code_commune",
+}
+NOMS_NIVEAUX = {
+    "region": "region",
+    "departement": "departement",
+    "commune": "nom_commune",
+}
 # Vue de départ : la France entière, ou une région
 CENTRE_FRANCE = {"lat": 46.6, "lon": 2.5}
 ZOOM_FRANCE = 4.6
@@ -40,7 +48,7 @@ def charger_donnees() -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
         )
         equipements = pd.read_sql_query(
             "SELECT region, code_departement, code_commune, "
-            "\"Type d'équipement sportif\" AS type_equipement FROM cleaned",
+            '"Type d\'équipement sportif" AS type_equipement FROM cleaned',
             connexion,
         )
         population = pd.read_sql_query(
@@ -55,7 +63,12 @@ def charger_donnees() -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
 
 def types_principaux(equipements: pd.DataFrame, cle: str) -> pd.Series:
     """Liste les 3 types d'équipements les plus présents dans chaque territoire."""
-    comptes = equipements.groupby([cle, "type_equipement"]).size().rename("total").reset_index()
+    comptes = (
+        equipements.groupby([cle, "type_equipement"])
+        .size()
+        .rename("total")
+        .reset_index()
+    )
     comptes = comptes.sort_values([cle, "total"], ascending=[True, False])
     premiers = comptes.groupby(cle).head(3)
     libelles = premiers["type_equipement"] + " (" + premiers["total"].astype(str) + ")"
@@ -93,6 +106,7 @@ def preparer_niveaux() -> dict[str, pd.DataFrame]:
         for niveau in CLES_NIVEAUX
     }
 
+
 def choisir_niveau(zoom: float) -> str:
     """Choisit le niveau de regroupement de la vue France selon le zoom."""
     if zoom < SEUIL_REGIONS:
@@ -102,15 +116,22 @@ def choisir_niveau(zoom: float) -> str:
     return "commune"
 
 
-def filtrer_vue(bulles: pd.DataFrame, centre: dict[str, float], zoom: float) -> pd.DataFrame:
+def filtrer_vue(
+    bulles: pd.DataFrame, centre: dict[str, float], zoom: float
+) -> pd.DataFrame:
     """Garde les communes visibles à l'écran, les plus équipées en priorité."""
     demi_largeur = 720 / 2**zoom  # taille approximative de l'écran, en degrés
     visibles = bulles[
-        bulles["longitude"].between(centre["lon"] - demi_largeur, centre["lon"] + demi_largeur)
-        & bulles["latitude"].between(centre["lat"] - demi_largeur * 0.7, centre["lat"] + demi_largeur * 0.7)
+        bulles["longitude"].between(
+            centre["lon"] - demi_largeur, centre["lon"] + demi_largeur
+        )
+        & bulles["latitude"].between(
+            centre["lat"] - demi_largeur * 0.7, centre["lat"] + demi_largeur * 0.7
+        )
     ]
     nombre = COMMUNES_VUE_REGION * 2 ** max(0.0, zoom - ZOOM_REGION)
     return visibles.nlargest(min(int(nombre), MAX_COMMUNES), "installations")
+
 
 def tailles_bulles(installations: pd.Series) -> pd.Series:
     """Calcule la taille des bulles : la surface est proportionnelle au nombre."""
@@ -144,6 +165,7 @@ def textes_survol(bulles: pd.DataFrame) -> list[str]:
         for ligne in bulles.itertuples()
     ]
 
+
 def trace_bulles(bulles: pd.DataFrame, marqueur: dict) -> go.Scattermap:
     """Crée une couche de bulles avec le ratio pour 10 000 habitants écrit dedans."""
     marqueur["size"] = tailles_bulles(bulles["installations"])
@@ -176,7 +198,11 @@ def creer_carte_bulles(
         "cmin": echelle[0],
         "cmax": echelle[1],
         "opacity": 0.9,
-        "colorbar": {"title": {"text": "Installations<br>pour 10 000 hab."}, "thickness": 12, "len": 0.6},
+        "colorbar": {
+            "title": {"text": "Installations<br>pour 10 000 hab."},
+            "thickness": 12,
+            "len": 0.6,
+        },
     }
     figure = go.Figure(
         [
@@ -192,4 +218,3 @@ def creer_carte_bulles(
         uirevision=cle_vue,  # garde le zoom de l'utilisateur quand la carte est redessinée
     )
     return figure
-
