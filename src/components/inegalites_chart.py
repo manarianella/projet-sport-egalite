@@ -67,7 +67,7 @@ def creer_graphique_inegalites(
     _ = mode
 
     filtre_region = ""
-    parametres = [POPULATION_MINIMALE]
+    parametres: list[int | str] = [POPULATION_MINIMALE]
 
     if region not in (None, TOUTE_LA_FRANCE):
         filtre_region = "AND p.nom_region = ?"
