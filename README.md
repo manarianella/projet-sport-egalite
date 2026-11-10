@@ -837,11 +837,14 @@ Pour cela, nous nous appuyons sur trois visualisations : la carte géographique,
 
 Le rapport d'analyse présente les principaux résultats chiffrés et leur interprétation à partir des données réellement représentées dans le dashboard.
 
-Dans les captures nationales disponibles pendant le développement, nous avons observé **334 371 équipements**, **144 564 installations** et **28 455 communes représentées**. Ces volumes montrent l'ampleur des données exploitées, sans prouver à eux seuls que les infrastructures sont réparties équitablement.
+Nos principaux résultats sont les suivants :
 
-L'histogramme met en évidence une forte concentration d'équipements parmi les surfaces les plus petites, tandis que des surfaces plus élevées correspondent à des effectifs moins nombreux. L'interprétation doit toutefois tenir compte de la nature des équipements et des surfaces naturelles atypiques.
+- **334 371 équipements** et **144 564 installations** ont été analysés, soit en moyenne environ **21 installations pour 10 000 habitants** en France.
+- **Les grandes villes sont moins dotées par habitant.** L'Île-de-France compte environ 8 installations pour 10 000 habitants, presque quatre fois moins que l'Occitanie (30,3). Paris compte environ 4,5 installations pour 10 000 habitants, et les communes denses de la petite couronne se situent souvent entre 5 et 10.
+- **Les communes les mieux dotées par habitant sont souvent touristiques**, comme des communes de montagne (Vallouise-Pelvoux, Laruns, Les Contamines-Montjoie, Mont-Dore) : leurs infrastructures servent aussi aux visiteurs, qui ne sont pas comptés dans la population.
+- **La majorité des équipements sont de petite taille** : 65,9 % font moins de 1 000 m², avec un second pic autour de 6 000 à 8 000 m², correspondant aux terrains de grands jeux.
 
-Le diagramme des communes montre que certaines communes de montagne ou touristiques peuvent présenter des ratios élevés pour 10 000 habitants. Cette observation est utile, mais ne démontre pas que les habitants de ces territoires disposent systématiquement d'un meilleur accès à la pratique sportive.
+Ces résultats mesurent une **dotation par habitant**, et non l'accès réel à la pratique sportive.
 
 Pour approfondir ces observations, nous avons prévu un rapport détaillé :
 
@@ -873,7 +876,7 @@ Les données exploitées proviennent de ressources publiques et les bibliothèqu
 
 L'utilisation de ressources extérieures et d'outils d'intelligence artificielle est précisée dans les sections suivantes afin de distinguer notre travail des aides utilisées.
 
-Les voici : LIEN A METTRE ICI 
+Les prompts les plus structurants sont détaillés dans [docs/prompts_ia.md](docs/prompts_ia.md).
 
 ### 5.2. Répartition du travail
 
@@ -939,7 +942,7 @@ Les éléments proposés ont été confrontés au fonctionnement de l'applicatio
 
 Pour documenter l'utilisation des ressources extérieures, nous avons distingué les différentes parties du projet concernées, la nature de l'aide obtenue et les moyens utilisés pour vérifier les propositions.
 
-ChatGPT a principalement été utilisé comme outil d'accompagnement pour comprendre certaines fonctionnalités, proposer des solutions techniques, résoudre des erreurs et améliorer la documentation. Les propositions de code ont ensuite été intégrées et adaptées à notre projet.
+Deux assistants d'intelligence artificielle ont été utilisés comme outils d'accompagnement : **ChatGPT** (principalement par Anella) et **Claude** (principalement par Zelal). Ils ont servi à comprendre certaines fonctionnalités, proposer des solutions techniques, résoudre des erreurs et améliorer la documentation. Les propositions de code ont ensuite été relues, testées, intégrées et adaptées à notre projet. Les prompts les plus structurants sont détaillés dans [docs/prompts_ia.md](docs/prompts_ia.md).
 
 | Partie du projet | Assistance utilisée | Vérification et adaptation |
 |---|---|---|
@@ -947,9 +950,11 @@ ChatGPT a principalement été utilisé comme outil d'accompagnement pour compre
 | `assets/style.css` et `assets/zz_sidebar.css` | ChatGPT : propositions de styles CSS pour les couleurs, les cartes statistiques, les infobulles explicatives, la navigation et les filtres. | Tests visuels dans le navigateur et adaptations progressives à partir de nos captures d'écran. |
 | `src/components/histogram.py` | ChatGPT : aide à la construction de l'histogramme avec NumPy et Plotly, au calcul des intervalles et aux informations affichées au survol. | Contrôle des résultats avec plusieurs filtres et exécution des tests unitaires. |
 | `src/components/histogram_layout.py` | ChatGPT : aide à l'intégration du filtre de nature et à la présentation de l'histogramme dans Dash. | Vérification du fonctionnement du menu déroulant et de l'actualisation du graphique. |
-| `src/components/inegalites_chart.py` | ChatGPT : aide aux requêtes SQLite, au calcul des ratios par habitant, à la sélection des communes et aux infobulles. | Contrôle des résultats affichés, vérification des classements et comparaison des données avec les tables SQLite. |
-| `src/components/map_chart.py` | Assistance extérieure à documenter selon le travail effectivement réalisé par Zelal. | Vérification à compléter avec Zelal, en s'appuyant sur son code et ses tests. |
-| `src/utils/clean_data.py` et `src/utils/get_data.py` | Aides éventuelles à la préparation des données et à l'organisation des traitements Python, à préciser selon les contributions respectives. | Vérification des fichiers générés, des colonnes et des tables SQLite. |
-| `README.md` | ChatGPT : assistance à la rédaction, à la reformulation et à l'actualisation de la documentation. | Relecture et comparaison avec les fonctionnalités réellement présentes dans l'application. |
+| `src/components/inegalites_chart.py` | ChatGPT : aide aux requêtes SQLite, au calcul des ratios par habitant, à la sélection des communes et aux infobulles. Claude : correction d'une erreur de typage signalée par Mypy (liste des paramètres SQL). | Contrôle des résultats affichés, vérification des classements, comparaison des données avec les tables SQLite et exécution de Mypy. |
+| `src/components/map_chart.py` et `src/components/map_layout.py` | Claude : aide à la conception de la carte à bulles (regroupement par région, département et commune selon le zoom, lecture du zoom avec `relayoutData`, conservation de la vue avec `uirevision`, réduction des communes affichées), au calcul du ratio pour 10 000 habitants et aux infobulles (types d'équipements les plus présents). | Tests unitaires de la carte, vérification dans le navigateur sur plusieurs régions et niveaux de zoom, comparaison de ratios avec des calculs à la main. |
+| `src/utils/get_data.py` | Claude : aide au téléchargement des installations et des populations, à l'import du fichier JSON de l'API avec `json_normalize` et au regroupement des scripts de récupération dans un seul fichier. | Contrôle du nombre de lignes des tables `raw_installations` et `raw_population`, vérification des colonnes importées. |
+| `src/utils/clean_data.py` | Claude : aide au nettoyage des installations (doublons, séparation et contrôle des coordonnées, codes de département), à la jointure entre équipements et installations, au regroupement des arrondissements de Paris, Marseille et Lyon et au nettoyage des populations. | Contrôle des tables `cleaned_installations` et `cleaned_population`, vérification des communes dans les classements, tests unitaires du nettoyage. |
+| `tests/` | Claude : aide à l'écriture des tests avec des données fictives, des bases SQLite temporaires (`tmp_path`) et `monkeypatch`, et à la configuration de Mypy dans `pyproject.toml`. | Exécution de `pytest`, `ruff` et `mypy`, valeurs attendues vérifiées par des calculs à la main. |
+| `README.md` et `docs/rapport_analyse.md` | ChatGPT et Claude : assistance à la rédaction, à la reformulation et à l'actualisation de la documentation et du rapport d'analyse. | Relecture, comparaison avec les fonctionnalités réellement présentes dans l'application et vérification des chiffres à partir des tables SQLite et du dashboard. |
 
 Les aides utilisées n'ont pas servi à générer artificiellement les résultats statistiques. Les valeurs présentées dans SportÉgalité sont issues des données exploitées par nos scripts Python.
