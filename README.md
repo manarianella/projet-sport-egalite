@@ -88,13 +88,13 @@ uv --version
 Ouvrir un terminal et cloner le dépôt GitLab :
 
 ```bash
-git clone git@git.esiee.fr:manaria/projet-sport-egalite.git
+git clone https://git.esiee.fr/manaria/dataproject.git
 ```
 
 Se déplacer ensuite dans le dossier du projet :
 
 ```bash
-cd projet-sport-egalite
+cd dataproject
 ```
 
 La commande de clonage SSH nécessite un accès GitLab correctement configuré. Il est également possible d'utiliser l'URL HTTPS fournie par GitLab.
