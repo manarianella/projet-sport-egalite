@@ -99,5 +99,3 @@ def test_filtrer_vue_garde_les_communes_visibles(
     visibles = filtrer_vue(bulles, {"lat": 48.11, "lon": -1.67}, 9.0)
 
     assert list(visibles["nom"]) == ["Rennes"]
-
-
