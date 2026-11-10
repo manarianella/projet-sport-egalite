@@ -219,26 +219,37 @@ Enfin, l'ensemble des indicateurs se met à jour lorsqu'une autre région est s�
 
 *Figure 2 — Carte interactive représentant la répartition territoriale des installations sportives, à l'aide de marqueurs regroupés et d'une échelle de couleur.*
 
-La carte constitue la première visualisation de notre dashboard. Elle permet de représenter géographiquement les installations sportives recensées et d'observer les différences entre les territoires.
+La carte constitue la première visualisation de notre dashboard. Elle représente les installations sportives et les rapporte à la population, pour comparer les territoires entre eux.
 
-Nous avons choisi une représentation cartographique, car la localisation des infrastructures est importante pour comprendre leur répartition. Deux territoires peuvent posséder un nombre comparable d'installations, mais celles-ci peuvent être concentrées dans quelques zones ou réparties sur une surface plus importante.
+**Des bulles qui se divisent selon le zoom.** Afficher les 144 564 installations une par une rendrait la carte illisible et lente. Les installations sont donc regroupées en bulles, selon le niveau de zoom :
 
-Pour rendre la carte plus lisible, nous avons adopté un système de regroupement des installations en fonction du niveau de zoom.
+- en vue « Toute la France », **une bulle par région** ;
+- en zoomant (à partir du niveau 6), **une bulle par département** ;
+- en zoomant davantage (à partir du niveau 8), **une bulle par commune**.
 
-À une échelle large, afficher chaque installation individuellement produirait un nombre important de points, parfois superposés. Les installations sont donc regroupées en marqueurs, ce qui facilite la lecture de la carte et permet d'identifier les zones présentant des concentrations différentes.
+Au niveau des communes, seules les communes **visibles à l'écran** sont affichées, en commençant par les plus équipées : 40 communes à la vue de départ d'une région, puis deux fois plus à chaque niveau de zoom supplémentaire (1 500 au maximum). Cela réduit fortement le volume de données envoyé au navigateur.
 
-La représentation utilise également des variations de couleur. La légende située à droite de la carte indique un nombre d'installations rapporté à **10 000 habitants**. Cet indicateur permet de mettre en relation la quantité d'infrastructures et la population des territoires représentés.
+**Lecture des bulles.**
 
-L'utilisateur peut interagir avec la carte de plusieurs manières :
+- La **taille** d'une bulle correspond au nombre d'installations du territoire.
+- La **couleur** et le **nombre écrit dans la bulle** correspondent au nombre d'**installations pour 10 000 habitants**. Plus la bulle est foncée, plus le territoire compte d'installations par habitant.
+- Les territoires dont la population est inconnue apparaissent en gris.
 
-- **Sélectionner une région** dans le menu latéral pour concentrer son analyse sur un territoire.
-- **Zoomer ou dézoomer** afin de modifier l'échelle d'observation.
-- **Déplacer la carte** pour examiner différentes zones géographiques.
-- **Consulter les informations associées aux marqueurs** pour obtenir davantage de précisions sur les territoires représentés.
+L'échelle de couleurs s'adapte aux bulles affichées (du 5ᵉ au 95ᵉ centile), afin de garder des contrastes lisibles à chaque niveau de zoom. C'est pourquoi la valeur exacte est aussi écrite dans chaque bulle.
 
-L'utilisation de regroupements permet de passer progressivement d'une vue d'ensemble à une observation plus locale, tout en limitant la superposition des informations.
+**Infobulles.** Au survol d'une bulle, l'infobulle affiche :
 
-Cette carte constitue un premier outil d'analyse des disparités territoriales. Elle nous aide à repérer les contrastes géographiques et à identifier des territoires qu'il peut être intéressant d'étudier plus précisément.
+- le nom du territoire (région, département ou commune) ;
+- sa population ;
+- son nombre d'installations et d'équipements sportifs ;
+- son nombre d'installations pour 10 000 habitants ;
+- les **trois types d'équipements les plus présents**, avec leur nombre (par exemple « Court de tennis (616), Terrain de football (570), Boulodrome (560) »).
+
+**Choix d'une région.** Lorsqu'une région est sélectionnée dans le menu latéral, la carte se centre sur elle et affiche directement **ses communes**. L'utilisateur peut ensuite zoomer et se déplacer : de nouvelles communes apparaissent au fur et à mesure. Le retour à « Toute la France » affiche à nouveau les bulles régionales.
+
+Cette carte met en évidence un résultat important : les grandes villes ont beaucoup d'installations en nombre, mais souvent **moins par habitant** que les territoires moins denses. Par exemple, l'Île-de-France compte environ 8 installations pour 10 000 habitants, contre 30 en Occitanie.
+
+Il faut néanmoins distinguer la présence d'installations de leur accessibilité réelle : la carte ne renseigne pas sur les temps de trajet, les tarifs, les horaires d'ouverture ou les conditions d'utilisation.
 
 Il faut néanmoins distinguer la présence d'installations de leur accessibilité réelle. La carte ne renseigne pas directement sur les temps de trajet, les tarifs, les horaires d'ouverture ou les conditions d'utilisation des infrastructures.
 
@@ -395,7 +406,12 @@ Ce jeu de données décrit les installations sportives, leur identification, leu
 
 #### Populations communales
 
-SI TU PEUX COLLER ICI LE LIEN STP comme ce qui est écrit de la ligne 286 à 288 MERCIIII
+- **Producteur :** Insee, diffusion par la Direction interministérielle du numérique (DINUM)
+- **API publique :** [API Découpage administratif (API Géo)](https://www.data.gouv.fr/dataservices/api-decoupage-administratif-api-geo)
+- **Requête utilisée :** [geo.api.gouv.fr/communes](https://geo.api.gouv.fr/communes?fields=code,nom,population,codeDepartement,codeRegion,region&format=json)
+- **Fichier local :** `data/raw/population_communes.json`
+
+Cette source est une **API** : `get_data.py` l'interroge et enregistre la réponse JSON telle quelle. L'année de référence des populations n'est pas précisée par l'API.
 
 La population est utilisée pour calculer les indicateurs pour **10 000 habitants**. Les communes sont associées aux infrastructures à partir de leur **code INSEE harmonisé**.
 
@@ -463,11 +479,11 @@ Les équipements sans surface exploitable ne sont pas nécessairement retirés d
 
 Les installations font l'objet de traitements adaptés à leur structure :
 
-1. Identification et gestion des doublons à partir du numéro d'installation.
-2. Conversion et contrôle de la latitude et de la longitude.
-3. Harmonisation des identifiants de communes et de départements.
-4. Renommage des champs pour faciliter leur lecture dans le code.
-5. Mise à disposition des informations territoriales nécessaires aux regroupements de la carte.
+1. Séparation du champ `coordonnees` (« latitude, longitude ») en deux colonnes numériques `latitude` et `longitude`.
+2. Suppression des installations sans coordonnées ou avec des coordonnées invalides (7 732 installations exclues).
+3. Correction des codes de département et harmonisation des codes INSEE des communes.
+4. Renommage des colonnes pour faciliter leur lecture dans le code.
+5. Regroupement des arrondissements de Paris, Marseille et Lyon (voir 2.6).
 
 La qualité des coordonnées est particulièrement importante : une valeur manquante ou incohérente peut empêcher l'affichage correct d'une installation sur la carte.
 
@@ -491,6 +507,10 @@ Deux colonnes sont utilisées :
 - `nom_commune` : nom de la commune après harmonisation.
 
 Le regroupement permet de produire des jointures avec la population et des comparaisons communales plus cohérentes.
+
+### 2.6.1. Nettoyage des populations communales
+
+La fonction `nettoyer_population()` renomme les colonnes (`code_commune`, `nom_commune`, `population`, `code_departement`, `code_region`, `nom_region`), convertit la population en nombre entier, supprime les communes sans population ou avec une population nulle, puis supprime les doublons de code commune. Sur 34 969 communes brutes, 34 957 sont conservées.
 
 ### 2.7. Organisation de la base SQLite
 
@@ -517,7 +537,7 @@ Les contrôles effectués pendant le développement ont montré les volumes suiv
 |---|---:|
 | `raw` | 334 371 |
 | `cleaned` | 334 371 |
-| `raw_installations` | 152 309 |
+| `raw_installations` | 152 296 |
 | `cleaned_installations` | 144 564 |
 | `raw_population` | 34 969 |
 | `cleaned_population` | 34 957 |
@@ -767,7 +787,23 @@ uv run ruff check .
 uv run ruff format --check .
 ```
 
-La qualité du typage et la complexité peuvent également être examinées avec **Mypy** et **Radon**, outils mentionnés dans les critères d'évaluation. Les commandes exactes doivent correspondre aux dépendances installées dans le projet.
+Pour le typage et la complexité :
+
+```bash
+uv run mypy src
+uv run radon cc src -a
+```
+
+**Résultats de la version finale :**
+
+| Outil | Résultat |
+|---|---|
+| pytest | 23 tests réussis (carte : 6, nettoyage : 9, histogramme : 5, jointure : 3) |
+| Ruff | aucune erreur |
+| Mypy | aucune erreur (`ignore_missing_imports` activé dans `pyproject.toml` pour pandas et plotly) |
+| Radon | complexité moyenne A |
+
+Les tests utilisent de petites données de test ou une base SQLite temporaire : ils ne dépendent ni de la base `data/db.sqlite`, ni d'une connexion Internet.
 
 ### 3.8. Organisation du travail avec Git
 
@@ -869,7 +905,7 @@ Les deux membres ont également contribué aux échanges de conception, aux revu
 
 - Équipements sportifs : https://data.sports.gouv.fr/
 - Installations sportives : https://equipements.sports.gouv.fr/
-- Populations communales : **URL exacte de l'API à ajouter après vérification**.
+- Populations communales : https://www.data.gouv.fr/dataservices/api-decoupage-administratif-api-geo (API Géo, populations Insee)
 
 **Documentation technique**
 

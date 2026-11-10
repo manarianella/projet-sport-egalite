@@ -174,6 +174,7 @@ def joindre_territoires() -> None:
         f"({rattaches / len(resultat):.1%})."
     )
 
+
 def nettoyer_population() -> None:
     """Nettoie la population des communes et crée la table cleaned_population."""
     with closing(sqlite3.connect(DATABASE_PATH)) as connexion:
@@ -202,9 +203,9 @@ def nettoyer_population() -> None:
         f"{nombre_brut - len(donnees)} exclues."
     )
 
+
 if __name__ == "__main__":
     nettoyer_equipements()
     nettoyer_installations()
     joindre_territoires()
     nettoyer_population()
-    
