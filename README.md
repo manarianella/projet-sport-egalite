@@ -85,19 +85,19 @@ uv --version
 
 ### 1.2. Récupération du projet
 
-Ouvrir un terminal et cloner le dépôt GitLab :
+Ouvrir un terminal et cloner le dépôt GitHub :
 
 ```bash
-git clone https://git.esiee.fr/manaria/dataproject.git
+git clone https://github.com/manarianella/projet-sport-egalite.git
 ```
 
 Se déplacer ensuite dans le dossier du projet :
 
 ```bash
-cd dataproject
+cd projet-sport-egalite
 ```
 
-La commande de clonage SSH nécessite un accès GitLab correctement configuré. Il est également possible d'utiliser l'URL HTTPS fournie par GitLab.
+Le dépôt peut être cloné directement depuis GitHub avec HTTPS.
 
 ### 1.3. Installation des dépendances
 
